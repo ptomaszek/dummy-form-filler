@@ -11,7 +11,7 @@ Useful for web developers and testers.
  - email
 
 ####Installation:
-Download **dummy-form-filler.xpi** file from the bin directory and drag it over Firefox window. A new icon should appear on the Toolbar.
+Download **bin/dummy-form-filler.xpi** file and drag it over a Firefox window. A new icon should appear on the Toolbar.
 
 ####Requirements:
 - Firefox > 29
