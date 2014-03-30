@@ -11,6 +11,7 @@ Useful for web developers and testers.**
  - email
  - radio
  - checkbox
+ - number
 
 ####Installation:
 Download **bin/dummy-form-filler.xpi** file and drag it over a Firefox window. A new icon should appear on the Toolbar.

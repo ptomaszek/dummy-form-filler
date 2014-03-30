@@ -28,17 +28,38 @@ function populateInputIfNotSetYet($input, $topParent) {
 	if (isVisible($input) && isEnabled($input) && !isAnyInputChecked($checkboxInputs)) {
 	    checkRandomInputs($checkboxInputs);
 	}
+    } else if ($input.is('[type=number]')) {
+	if (isEmpty($input) && isVisible($input) && isEnabled($input)) {
+	    populateRandomNumberWisely($input);
+	}
     }
+}
+
+/*
+ * Considers: 
+ * - min and max properties 
+ * - name and label to guess input's role, e.g. age, year
+ */
+function populateRandomNumberWisely($input) {
+    var min = $input.prop('min');
+    var max = $input.prop('max');
+    // if(year){}
+    // if(age){}
+    // var min = $.isNumeric(minInputProp) ? minInputProp : 0;
+    // var max = $.isNumeric(maxInputProp) ? maxInputProp : (+min+100);
+
+    var randomNumber = +Math.floor(Math.random() * ((max - min) + 1)) + +min;
+    $input.val(randomNumber);
 }
 
 function isAnyInputChecked($inputs) {
     var anyInputChecked = false;
 
-    $inputs.each(function () {
-        if ($(this).is(':checked')) {
-            anyInputChecked = true;
-            return false; //breaks the loop
-        }
+    $inputs.each(function() {
+	if ($(this).is(':checked')) {
+	    anyInputChecked = true;
+	    return false; // breaks the loop
+	}
     });
 
     return anyInputChecked;
