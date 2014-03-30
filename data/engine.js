@@ -31,21 +31,23 @@ function populateInputIfNotSetYet($input, $topParent) {
     }
 }
 
-function isAnyInputChecked($inputs){
-    var isGroupSet = false;
+function isAnyInputChecked($inputs) {
+    var anyInputChecked = false;
 
-    $inputs.each(function() {
-        if($(this).is(':checked')){
-            isGroupSet = true;
+    $inputs.each(function () {
+        if ($(this).is(':checked')) {
+            anyInputChecked = true;
+            return false; //breaks the loop
         }
     });
-    
-    return isGroupSet;
+
+    return anyInputChecked;
 }
 
 function findInputsByTypeAndName($here, type, name) {
     return $here.find('input[type=' + type + '][name=' + name + ']');
 }
+
 function checkRandomInput($inputs) {
     var randomIndex = Math.floor(Math.random() * $inputs.size());
     $($inputs[randomIndex]).prop('checked', true);
@@ -55,7 +57,9 @@ function checkRandomInputs($inputs) {
     var randomBoolean;
     $.each($inputs, function() {
 	randomBoolean = (Math.floor(Math.random() * 2) === 0);
-	$($(this)).prop('checked', randomBoolean);
+	if (randomBoolean && isVisible($(this)) && isEnabled($(this))) {
+	    $($(this)).prop('checked', true);
+	}
     });
 }
 
@@ -74,18 +78,24 @@ function getDummyText() {
 
 function getDummyEmail() {
     var email = "";
-    var size = 3 + Math.floor(Math.random() * 7);
+    var random3To9 = 3 + Math.floor(Math.random() * 7);
+    var random2To6 = 2 + Math.floor(Math.random() * 5);
 
-    for ( var i = 0; i < size; i++) {
-	email += LETTERS.charAt(Math.floor(Math.random() * LETTERS.length));
+    email = getDummyStringNoWhitespaces(random3To9);
+    email += '@';
+    email += getDummyStringNoWhitespaces(random2To6);
+    email += '.com';
+
+    return email;
+}
+
+function getDummyStringNoWhitespaces(length) {
+    var dummyString = '';
+    for ( var i = 0; i < length; i++) {
+	dummyString += LETTERS.charAt(Math.floor(Math.random() * LETTERS.length));
     }
 
-    email += '@'
-    for ( var i = 0; i < 5; i++) {
-	email += LETTERS.charAt(Math.floor(Math.random() * LETTERS.length));
-    }
-
-    return email += '.com';
+    return dummyString;
 }
 
 function isEmpty($input) {
