@@ -1,9 +1,9 @@
 {
   "name": "dummy-form-filler",
   "title": "Dummy FormFiller",
-  "id": "jid1-cJykj0W7hPbL4Q",
+  "id": "3c3c58b1-7398-4256-9c0d-e57322904c2a",
   "description": "Simple form filler.",
   "author": "",
   "license": "MPL 2.0",
-  "version": "0.1"
+  "version": "0.1.20140330"
 }
