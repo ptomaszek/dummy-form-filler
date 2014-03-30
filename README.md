@@ -1,8 +1,8 @@
 Dummy FormFiller for Firefox
 ------
 
-Simple extension that populates forms with dummy data. 
-Useful for web developers and testers.
+**Simple extension that populates forms with dummy data. 
+Useful for web developers and testers.**
 
 ####Features:
 - Lack of features
