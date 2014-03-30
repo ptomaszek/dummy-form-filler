@@ -1,35 +1,53 @@
+var $HERE = $('form');
+
 function populateDummyData() {
-    var $where = $('form');
-    var $textInputs = findTextInputs($where);
-    var $emailInputs = findEmailInputs($where);
-    var $radioInputs = findRadioInputs($where);
-
-    console.log("Text inputs: %s", $textInputs.size());
-    console.log("Email inputs: %s", $emailInputs.size());
-    console.log("Radio inputs: %s", $radioInputs.size());
-
-    populateTextInputs($textInputs);
-    populateEmailInputs($emailInputs);
-    // populateRadioInputs($radioInputs);
+    $.each($HERE.find('input'), function () {
+        populateInputIfNotSetYet($(this));
+    });
 }
 
-/*Returns text inputs that are empty, visible and enabled. */
-function findTextInputs($here) {
-    var $inputs = $here.find('input:text');
-    var $fitleredInputs = $inputs.filter(function () {
-        if (isEmpty($(this)) && isVisible($(this)) && isEnabled($(this))) {
-            return true;
-        } else {
-            return false;
+function populateInputIfNotSetYet($input) {
+	var dummyEmail = getDummyEmail();
+	
+    if ($input.is(':text')) {
+        if (isEmpty($input) && isVisible($input) && isEnabled($input)) {
+            $input.val(getDummyText());
         }
-    });
+    } else if ($input.is('[type=email]')) {
+        if (isEmpty($input) && isVisible($input) && isEnabled($input)) {
+            $input.val(dummyEmail);
+        }
+    } else if ($input.is(':radio')) {
+        var groupName = $input.prop('name');
+        var $radioInputs = findRadioInputsByName(groupName);
+        if (isVisible($input) && isEnabled($input) && !isRadioGroupSet($radioInputs)) {
+            checkRandomRadioButton($radioInputs);
+        }
+    }
+}
+function isRadioGroupSet($radioInputs){
+    var isGroupSet = false;
 
-    return $fitleredInputs;
+    $($radioInputs.each(function() {
+        if($(this).is(':checked')){
+            isGroupSet = true;
+        }
+    }));
+    
+    return isGroupSet;
+}
+
+function findRadioInputsByName(name){
+    return $HERE.find("input:radio[name='" + name + "']");
+}
+function checkRandomRadioButton($radioInputs){
+   var randomIndex = Math.floor(Math.random()*$radioInputs.size());
+   $($radioInputs[randomIndex]).prop('checked', true);
 }
 
 /*Returns email inputs that are empty, visible and enabled. */
 function findEmailInputs($here) {
-    var $inputs = $here.find('input[type=email]');
+    var $inputs = $here.find('');
     var $fitleredInputs = $inputs.filter(function () {
         if (isEmpty($(this)) && isVisible($(this)) && isEnabled($(this))) {
             return true;
@@ -40,64 +58,6 @@ function findEmailInputs($here) {
 
     return $fitleredInputs;
 }
-
-/*Returns array of grouped (by name) radio inputs that are not set, are visible and enabled. */
-function findRadioInputs($here) {
-    var $inputs = $here.find('input:radio');
-    var $excludedInputNames = getUncheckedRadioInputGroups($inputs);
-
-    // alert($excludedInputNames.prop("name"));
-
-    var $fitleredInputs = $inputs.filter(function () {
-        if (isVisible($(this)) && isEnabled($(this))) {
-            return true;
-        } else {
-            return false;
-        }
-    });
-
-    return $fitleredInputs;
-}
-
-function getUncheckedRadioInputGroups($inputs) {
-    var alreadyCheckedRadioInputs = $inputs.filter(':checked').map(function (n, i) {
-        return $(i).prop('name');
-    });
-
-    var inputGroups = {};
-    $.each($inputs, function (key, value) {
-        var groupName = $(value).prop('name');
-        if ($.inArray(groupName, $(alreadyCheckedRadioInputs)) <0 ) { //if no radio in group set yet
-            if (!(groupName in inputGroups)) { //and no group for that radio exist 
-                inputGroups[groupName] = []; //then create an sub-array for a new radio group
-            }
-            inputGroups[groupName].push($(value));//add radio input to the group
-        }
-    });
-
-    return $inputGroups;
-}
-
-function populateTextInputs($inputs) {
-    $inputs.each(function () {
-        $(this).val(getDummyText());
-    });
-}
-
-function populateEmailInputs($inputs) {
-    var dummyEmail = getDummyEmail();
-    $inputs.each(function () {
-        $(this).val(dummyEmail);
-    });
-}
-
-/* function populateRadioInputs($inputs) {
-    //alert($inputs.size());
-    $inputs.each(function () {
-        alert();
-        $(this).checked(true);
-    });
-} */
 
 function getDummyText() {
     var startIndex = Math.floor(Math.random() * DEI_KOBOL.length - 5);
