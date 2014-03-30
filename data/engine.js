@@ -30,7 +30,7 @@ function populateInputIfNotSetYet($input, $topParent) {
 	}
     } else if ($input.is('[type=number]')) {
 	if (isEmpty($input) && isVisible($input) && isEnabled($input)) {
-	    populateRandomNumberWisely($input);
+	    populateWithRandomNumberWisely($input);
 	}
     }
 }
@@ -40,7 +40,7 @@ function populateInputIfNotSetYet($input, $topParent) {
  * - min and max properties 
  * - name and label to guess input's role, e.g. age, year
  */
-function populateRandomNumberWisely($input) {
+function populateWithRandomNumberWisely($input) {
     var min = $input.prop('min');
     var max = $input.prop('max');
     // if(year){}
