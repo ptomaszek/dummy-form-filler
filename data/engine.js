@@ -5,8 +5,9 @@ function populateDummyData() {
     });
 }
 
+var dummyEmail = getDummyEmail();
+
 function populateInputIfNotSetYet($input, $topParent) {
-    var dummyEmail = getDummyEmail();
 
     if ($input.is('[type=text]')) {
 	if (isEmpty($input) && isVisible($input) && isEnabled($input)) {
