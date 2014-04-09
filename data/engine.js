@@ -41,8 +41,8 @@ function populateInputIfNotSetYet($input, $topParent) {
 }
 
 /*
- * Considers: 
- * - min and max properties 
+ * Considers:
+ * - min and max properties
  * - name and label to guess input's role, e.g. age, year
  */
 function populateWithRandomTextWisely($input) {
@@ -64,8 +64,8 @@ function populateWithRandomTextWisely($input) {
 }
 
 /*
- * Considers: 
- * - min and max properties 
+ * Considers:
+ * - min and max properties
  * - name and label to guess input's role, e.g. age, year
  */
 function defineInputPurpose($input) {
@@ -81,7 +81,7 @@ function containsText(searchFor, inString) {
 }
 
 /*
- * Considers label text: 
+ * Considers label text:
  * - phone
  * - age
  * - year
@@ -103,8 +103,8 @@ function defineInputPurposeByLabel($input) {
 }
 
 /*
- * Considers: 
- * - min and max properties 
+ * Considers:
+ * - min and max properties
  * - name and label to guess input's role, e.g. age, year
  */
 function populateWithRandomNumberWisely($input) {
