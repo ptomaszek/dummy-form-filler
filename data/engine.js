@@ -7,10 +7,32 @@ function populateDummyData() {
 
 var dummyEmail = getDummyEmail();
 
-var PHONE_INPUT = 'phone_input';
-var AGE_INPUT = 'age_input';
-var YEAR_INPUT = 'year_input';
+/* Input purposes */
+var UNDEFINED_PURPOSE = 'undefined_purpose';
+var PHONE_PURPOSE = 'phone_purpose';
+var AGE_PURPOSE = 'age_purpose';
+var YEAR_PURPOSE = 'year_purpose';
+var NAME_PURPOSE = 'name_purpose';
+var POSTCODE_PURPOSE = 'postcode_purpose';
 
+/* Limit types */
+var MINLENGTH_LIMIT = 'minlength_limit';
+var MAXLENGTH_LIMIT = 'maxlength_limit';
+var MIN_LIMIT = 'min_limit';
+var MAX_LIMIT = 'max_limit';
+
+/* Class represents input limitation. */
+function Limit(type, value) {
+    this.type = type;
+    this.value = value;
+}
+
+/*
+ * Populates given input  with a dummy value within parent's scope.
+ * Does not modify already populated input or input's family (that is defined by the 'name' attribute).
+ * Tries to figure out input's purpose, e.g. age, year.
+ * Ensures the value meets input's limitations, e.g. min, minlength.
+ */
 function populateInputIfNotSetYet($input, $topParent) {
 
     if ($input.is('[type=text]')) {
@@ -46,16 +68,17 @@ function populateInputIfNotSetYet($input, $topParent) {
  * - name and label to guess input's role, e.g. age, year
  */
 function populateWithRandomTextWisely($input) {
+    var limits = defineLimits($input);
     var inputPurpose = defineInputPurpose($input);
 
     switch (inputPurpose) {
-    case PHONE_INPUT:
+    case PHONE_PURPOSE:
 	$input.val(getDummyPhone());
 	break;
-    case AGE_INPUT:
+    case AGE_PURPOSE:
 	$input.val('32');
 	break;
-    case YEAR_INPUT:
+    case YEAR_PURPOSE:
 	$input.val('1972');
 	break;
     default:
@@ -64,6 +87,35 @@ function populateWithRandomTextWisely($input) {
 }
 
 /*
+ * Returns an array of limits, i.e.:
+ * - min/max length
+ * - min/max value
+ */
+function defineLimits($input) {
+    var limits = [];
+    var minlength = $input.attr('minlength');
+    var maxlength = $input.attr('maxlength');
+    var min = $input.attr('min');
+    var max = $input.attr('max');
+
+    if (minlength) {
+	limits.push(new Limit(MINLENGTH_LIMIT, minlength));
+    }
+    if (maxlength) {
+	limits.push(new Limit(MAXLENGTH_LIMIT, maxlength));
+    }
+    if (min) {
+	limits.push(new Limit(MIN_LIMIT, min));
+    }
+    if (max) {
+	limits.push(new Limit(MIN_LIMIT, max));
+    }
+
+    logInfo($input, 'limits', limits);
+
+    return limits;
+}
+/*
  * Considers:
  * - min and max properties
  * - name and label to guess input's role, e.g. age, year
@@ -71,11 +123,19 @@ function populateWithRandomTextWisely($input) {
 function defineInputPurpose($input) {
     var purposeByLabel = defineInputPurposeByLabel($input);
 
-    if (typeof purposeByLabel !== "undefined") {
+    if (typeof purposeByLabel !== UNDEFINED_PURPOSE) {
+	logInfo($input, 'purpose', purposeByLabel);
 	return purposeByLabel;
     }
+
+    return UNDEFINED_PURPOSE;
 }
 
+function logInfo($input, key, value) {
+    if (value && value.length > 0) {
+	console.log('Input id=\'' + $input.prop('id') + '\'\t- ' + key + ': ' + JSON.stringify(value, null, 4));
+    }
+}
 function containsText(searchFor, inString) {
     return inString.toLowerCase().indexOf(searchFor) >= 0;
 }
@@ -94,12 +154,14 @@ function defineInputPurposeByLabel($input) {
     }
 
     if (containsText('phone', labelText)) {
-	return PHONE_INPUT;
+	return PHONE_PURPOSE;
     } else if (containsText('age', labelText)) {
-	return AGE_INPUT;
+	return AGE_PURPOSE;
     } else if (containsText('year', labelText)) {
-	return YEAR_INPUT;
+	return YEAR_PURPOSE;
     }
+
+    return UNDEFINED_PURPOSE;
 }
 
 /*
