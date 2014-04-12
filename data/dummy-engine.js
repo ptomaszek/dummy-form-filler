@@ -5,8 +5,8 @@ function populateDummyData() {
     });
 }
 
-var dummyEmail = getDummyEmail();
-
+var dummyEmail = chance.email();
+var excludedNames = [];
 /*
  * Populates given input  with a dummy value within parent's scope.
  * Does not modify already populated input or input's family (that is defined by the 'name' attribute).
@@ -14,7 +14,6 @@ var dummyEmail = getDummyEmail();
  * Ensures the value meets input's limitations, e.g. min, minlength.
  */
 function populateInputIfNotSetYet($input, $topParent) {
-
     if ($input.is('[type=text]')) {
 	if (isEmpty($input) && isVisible($input) && isEnabled($input)) {
 	    populateWithRandomTextWisely($input);
@@ -25,15 +24,21 @@ function populateInputIfNotSetYet($input, $topParent) {
 	}
     } else if ($input.is('[type=radio]')) {
 	var groupName = $input.prop('name');
-	var $radioInputs = findInputsByTypeAndName($topParent, 'radio', groupName);
-	if (isVisible($input) && isEnabled($input) && !isAnyInputChecked($radioInputs)) {
-	    clickRandomInput($radioInputs);
+	if (isVisible($input) && isEnabled($input) && !isExcluded(groupName)) {
+	    var $radioInputs = findVisibleEnabledInputsByTypeAndName($topParent, 'radio', groupName);
+	    if (!isAnyInputChecked($radioInputs)) {
+		clickRandomInput($radioInputs);
+	    }
+	    excludedNames.push(groupName);
 	}
     } else if ($input.is('[type=checkbox]')) {
 	var groupName = $input.prop('name');
-	var $checkboxInputs = findInputsByTypeAndName($topParent, 'checkbox', groupName);
-	if (isVisible($input) && isEnabled($input) && !isAnyInputChecked($checkboxInputs)) {
-	    clickRandomInputs($checkboxInputs);
+	if (isVisible($input) && isEnabled($input) && !isExcluded(groupName)) {
+	    var $checkboxInputs = findVisibleEnabledInputsByTypeAndName($topParent, 'checkbox', groupName);
+	    if (!isAnyInputChecked($checkboxInputs)) {
+		clickRandomInputs($checkboxInputs);
+	    }
+	    excludedNames.push(groupName);
 	}
     } else if ($input.is('[type=number]')) {
 	if (isEmpty($input) && isVisible($input) && isEnabled($input)) {
@@ -41,7 +46,7 @@ function populateInputIfNotSetYet($input, $topParent) {
 	}
     } else if ($input.is('[type=tel]')) {
 	if (isEmpty($input) && isVisible($input) && isEnabled($input)) {
-	    // populateWithRandomPhoneNumber($input);
+	    $input.val(getDummyPhoneNumber());
 	}
     }
 }

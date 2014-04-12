@@ -8,56 +8,77 @@ function getDummyNumber(limits) {
     if (min > max) {
 	return -1
     }
-    return +Math.floor(Math.random() * ((max - min) + 1)) + +min;
+    return chance.natural({
+	min : min,
+	max : max
+    });
 }
 
 /*
  * Returns random text of a length of 5 to 10 characters. First letter uppercased.
  */
 function getDummyText() {
-    var startIndex = Math.floor(Math.random() * DEI_KOBOL.length - 5);
-
-    if (startIndex < 0) {
-	startIndex = 0;
-    }
-
-    var endIndex = startIndex + 5 + Math.floor(Math.random() * 10);
-    var text = $.trim(DEI_KOBOL.substring(startIndex, endIndex));
-
-    return text.charAt(0).toUpperCase() + text.slice(1);
+    var text = $.trim(chance.string({
+	length : chance.natural({
+	    min : 5,
+	    max : 10
+	}),
+	pool : DEI_KOBOL
+    }));
+    return chance.capitalize(text);
 }
 
 /*
  * Returns random phone number.
+ * TODO: options: formatted phone number?
  */
-function getDummyPhone() {
-    return '123456789';
+function getDummyPhoneNumber() {
+    return chance.phone({
+	formatted : false
+    });
 }
 
 /*
- * Returns random email address.
- */
-function getDummyEmail() {
-    var email = "";
-    var random3To9 = 3 + Math.floor(Math.random() * 7);
-    var random2To6 = 2 + Math.floor(Math.random() * 5);
+* Return min and max limits if given.
+* Otherwise creates values for provided purpose.
+*/
+function getOrCreateMinAndMaxLimits(purpose, limits) {
+    purpose = typeof purpose !== 'undefined' ? purpose : '';
+    limits = typeof limits !== 'undefined' ? limits : {};
 
-    email = getDummyStringNoWhitespaces(random3To9);
-    email += '@';
-    email += getDummyStringNoWhitespaces(random2To6);
-    email += '.com';
-
-    return email;
-}
-
-/*
- * Returns random text without spaces of a given length.
- */
-function getDummyStringNoWhitespaces(length) {
-    var dummyString = '';
-    for ( var i = 0; i < length; i++) {
-	dummyString += LETTERS.charAt(Math.floor(Math.random() * LETTERS.length));
+    if (MIN_LIMIT in limits && MAX_LIMIT in limits) {
+	return limits;
     }
 
-    return dummyString;
+    var min = 1;
+    var max = 100;
+    var limitsToReturn = {};
+
+    if (AGE_PURPOSE === purpose) {
+	min = 21;
+	max = 75;
+    } else if (YEAR_PURPOSE === purpose) {
+	min = 1940;
+	max = 2015;
+    }
+
+    if (!(MIN_LIMIT in limits) && !(MAX_LIMIT in limits)) {
+	limitsToReturn[MIN_LIMIT] = min;
+	limitsToReturn[MAX_LIMIT] = max;
+	return limitsToReturn;
+    }
+
+    if (MIN_LIMIT in limits) {
+	limitsToReturn[MIN_LIMIT] = limits[MIN_LIMIT];
+    } else {
+	limitsToReturn[MIN_LIMIT] = min < limits[MAX_LIMIT] ? min : limits[MAX_LIMIT];
+    }
+
+    if (MAX_LIMIT in limits) {
+	limitsToReturn[MAX_LIMIT] = limits[MAX_LIMIT];
+    } else {
+	limitsToReturn[MAX_LIMIT] = max > limits[MIN_LIMIT] ? max : limits[MIN_LIMIT];
+    }
+
+    return limitsToReturn;
 }

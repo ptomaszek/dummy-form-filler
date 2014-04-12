@@ -21,7 +21,7 @@ Download **bin/dummy-form-filler.xpi** file and drag it over a Firefox window. A
  
 ---
 
-Testing on: http://jsfiddle.net/G3pTV/666 (revision number at the end)
+Testing on: http://jsfiddle.net/ptomaszek/m5DPn/ (check External Resources)
 
 #####TODO:
 - middle mouse click - clear forms

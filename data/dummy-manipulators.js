@@ -1,13 +1,11 @@
 function clickRandomInput($inputs) {
-    var randomIndex = Math.floor(Math.random() * $inputs.size());
-    $($inputs[randomIndex]).click();
+    $(chance.pick($inputs)).click();
 }
 
 function clickRandomInputs($inputs) {
     var randomBoolean;
     $.each($inputs, function() {
-	randomBoolean = (Math.floor(Math.random() * 2) === 0);
-	if (randomBoolean && isVisible($(this)) && isEnabled($(this))) {
+	if (chance.bool() && isVisible($(this)) && isEnabled($(this))) {
 	    $($(this)).click();
 	}
     });
@@ -20,15 +18,7 @@ function clickRandomInputs($inputs) {
  * - name and label to guess input's role, e.g. age, year
  */
 function populateWithRandomNumberWisely($input) {
-    var min = $input.prop('min');
-    var max = $input.prop('max');
-    // if(year){}
-    // if(age){}
-    // var min = $.isNumeric(minInputProp) ? minInputProp : 0;
-    // var max = $.isNumeric(maxInputProp) ? maxInputProp : (+min+100);
-
-    var randomNumber = +Math.floor(Math.random() * ((max - min) + 1)) + +min;
-    $input.val(randomNumber);
+    $input.val(getDummyNumber(getOrCreateMinAndMaxLimits()));
 }
 
 /*
@@ -42,8 +32,11 @@ function populateWithRandomTextWisely($input) {
     var limits = defineLimits($input);
 
     switch (inputPurpose) {
+    case UNDEFINED_PURPOSE:
+	$input.val(getDummyText());
+	break;
     case PHONE_PURPOSE:
-	// populateWithRandomPhoneNumber();
+	$input.val(getDummyPhoneNumber());
 	break;
     case AGE_PURPOSE:
 	var ageLimits = getOrCreateMinAndMaxLimits(AGE_PURPOSE, limits);

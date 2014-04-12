@@ -156,3 +156,11 @@ function defineInputPurposeByLabel($input) {
 function findInputsByTypeAndName($here, type, name) {
     return $here.find('input[type=' + type + '][name=' + name + ']');
 }
+
+function findVisibleEnabledInputsByTypeAndName($here, type, name) {
+    return $here.find('input[type=' + type + '][name=' + name + ']:visible:enabled');
+}
+
+function isExcluded(groupName) {
+    return $.inArray(groupName, excludedNames) !== -1;
+}
