@@ -21,12 +21,6 @@ var MAXLENGTH_LIMIT = 'maxlength_limit';
 var MIN_LIMIT = 'min_limit';
 var MAX_LIMIT = 'max_limit';
 
-/* Class represents input limitation. */
-function Limit(type, value) {
-    this.type = type;
-    this.value = value;
-}
-
 /*
  * Populates given input  with a dummy value within parent's scope.
  * Does not modify already populated input or input's family (that is defined by the 'name' attribute).
@@ -59,6 +53,10 @@ function populateInputIfNotSetYet($input, $topParent) {
 	if (isEmpty($input) && isVisible($input) && isEnabled($input)) {
 	    populateWithRandomNumberWisely($input);
 	}
+    } else if ($input.is('[type=tel]')) {
+	if (isEmpty($input) && isVisible($input) && isEnabled($input)) {
+	   // populateWithRandomPhoneNumber($input);
+	}
     }
 }
 
@@ -68,22 +66,79 @@ function populateInputIfNotSetYet($input, $topParent) {
  * - name and label to guess input's role, e.g. age, year
  */
 function populateWithRandomTextWisely($input) {
-    var limits = defineLimits($input);
     var inputPurpose = defineInputPurpose($input);
+    var limits = defineLimits($input);
 
     switch (inputPurpose) {
     case PHONE_PURPOSE:
-	$input.val(getDummyPhone());
+	// populateWithRandomPhoneNumber();
 	break;
     case AGE_PURPOSE:
-	$input.val('32');
+	var ageLimits = getOrCreateMinAndMaxLimits(AGE_PURPOSE, limits);
+	$input.val(getDummyNumber(ageLimits));
 	break;
     case YEAR_PURPOSE:
-	$input.val('1972');
+	var yearLimits = getOrCreateMinAndMaxLimits(YEAR_PURPOSE, limits);
+	$input.val(getDummyNumber(yearLimits));
 	break;
     default:
 	$input.val(getDummyText());
     }
+}
+
+/*
+* Return min and max limits if given.
+* Otherwise creates values for provided purpose.
+*/
+function getOrCreateMinAndMaxLimits(purpose, limits) {
+    if (MIN_LIMIT in limits && MAX_LIMIT in limits) {
+	return limits;
+    }
+
+    var min = 1;
+    var max = 100;
+    var limitsToReturn = {};
+
+    if (AGE_PURPOSE === purpose) {
+	min = 21;
+	max = 75;
+    } else if (YEAR_PURPOSE === purpose) {
+	min = 1940;
+	max = 2015;
+    }
+
+    if (!(MIN_LIMIT in limits) && !(MAX_LIMIT in limits)) {
+	limitsToReturn[MIN_LIMIT] = min;
+	limitsToReturn[MAX_LIMIT] = max;
+	return limitsToReturn;
+    }
+
+    if (MIN_LIMIT in limits) {
+	limitsToReturn[MIN_LIMIT] = limits[MIN_LIMIT];
+    } else {
+	limitsToReturn[MIN_LIMIT] = min < limits[MAX_LIMIT] ? min : limits[MAX_LIMIT];
+    }
+
+    if (MAX_LIMIT in limits) {
+	limitsToReturn[MAX_LIMIT] = limits[MAX_LIMIT];
+    } else {
+	limitsToReturn[MAX_LIMIT] = max > limits[MIN_LIMIT] ? max : limits[MIN_LIMIT];
+    }
+
+    return limitsToReturn;
+}
+
+/*
+ * Returns random number that meets given limitations, i.e. min and max values.
+ */
+function getDummyNumber(limits) {
+    var min = limits[MIN_LIMIT];
+    var max = limits[MAX_LIMIT];
+
+    if (min > max) {
+	return -1
+    }
+    return +Math.floor(Math.random() * ((max - min) + 1)) + +min;
 }
 
 /*
@@ -92,23 +147,23 @@ function populateWithRandomTextWisely($input) {
  * - min/max value
  */
 function defineLimits($input) {
-    var limits = [];
+    var limits = {};
     var minlength = $input.attr('minlength');
     var maxlength = $input.attr('maxlength');
     var min = $input.attr('min');
     var max = $input.attr('max');
 
     if (minlength) {
-	limits.push(new Limit(MINLENGTH_LIMIT, minlength));
+	limits[MINLENGTH_LIMIT] = minlength;
     }
     if (maxlength) {
-	limits.push(new Limit(MAXLENGTH_LIMIT, maxlength));
+	limits[MAXLENGTH_LIMIT] = maxlength;
     }
     if (min) {
-	limits.push(new Limit(MIN_LIMIT, min));
+	limits[MIN_LIMIT] = min;
     }
     if (max) {
-	limits.push(new Limit(MIN_LIMIT, max));
+	limits[MAX_LIMIT] = max;
     }
 
     logInfo($input, 'limits', limits);
@@ -131,8 +186,12 @@ function defineInputPurpose($input) {
     return UNDEFINED_PURPOSE;
 }
 
+/*
+* Prints information next to the given input.
+* Doesn't log if there's nothing to show.
+*/
 function logInfo($input, key, value) {
-    if (value && value.length > 0) {
+    if ((value && typeof value !== 'object') || (typeof value === 'object' && Object.keys(value).length !== 0)) {
 	console.log('Input id=\'' + $input.prop('id') + '\'\t- ' + key + ': ' + JSON.stringify(value, null, 4));
     }
 }
@@ -200,7 +259,7 @@ function findInputsByTypeAndName($here, type, name) {
 
 function checkRandomInput($inputs) {
     var randomIndex = Math.floor(Math.random() * $inputs.size());
-    $($inputs[randomIndex]).prop('checked', true);
+    $($inputs[randomIndex]).click();
 }
 
 function checkRandomInputs($inputs) {
@@ -208,7 +267,7 @@ function checkRandomInputs($inputs) {
     $.each($inputs, function() {
 	randomBoolean = (Math.floor(Math.random() * 2) === 0);
 	if (randomBoolean && isVisible($(this)) && isEnabled($(this))) {
-	    $($(this)).prop('checked', true);
+	    $($(this)).click();
 	}
     });
 }
@@ -262,8 +321,4 @@ function isVisible($input) {
 
 function isEnabled($input) {
     return $input.is(":enabled");
-}
-
-$.fn.exists = function() {
-    return this.length !== 0;
 }
