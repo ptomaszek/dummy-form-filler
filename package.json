@@ -1,8 +1,8 @@
 {
   "name": "dummy-form-filler",
-  "title": "Dummy FormFiller",
+  "title": "Dummy Form Filler",
   "id": "3c3c58b1-7398-4256-9c0d-e57322904c2a",
-  "description": "Simple form filler.",
+  "description": "One click to populate HTML forms with dummy data. Works out of the box.",
   "author": "",
   "license": "MPL 2.0",
   "version": "0.3-beta"
