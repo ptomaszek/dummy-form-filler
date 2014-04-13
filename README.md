@@ -28,3 +28,4 @@ Testing on: http://jsfiddle.net/ptomaszek/m5DPn/ (check External Resources)
 - supported input types:
  - most common: textbox
 - learn how to write unit tests for the library!
+- modularization

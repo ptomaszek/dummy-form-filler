@@ -1,5 +1,5 @@
 function populateDummyData() {
-    var $here = $('form');
+    var $here = $('html');
 
     $.each($here.find('input'), function() {
 	populateInputIfNotSetYet($(this), $here);
