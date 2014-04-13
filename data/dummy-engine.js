@@ -86,6 +86,7 @@ function populateWithRandomTextWisely($input) {
     case AGE_PURPOSE:
     case YEAR_PURPOSE:
 	populateWithRandomNumberWisely($input, inputPurpose);
+	break;
     case UNDEFINED_PURPOSE:
     default:
 	$input.val(getDummyText());
