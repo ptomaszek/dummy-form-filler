@@ -13,6 +13,8 @@ Useful for web developers and testers.**
  - email
  - radio
  - checkbox
+ - select
+ - textarea
  - number
  - tel
  

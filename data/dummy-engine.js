@@ -6,7 +6,7 @@ DummyFormFiller = (function() {
     engine.populateDummyData = function() {
 	var $here = $('html');
 
-	$.each($here.find('input, select'), function() {
+	$.each($here.find('input, select, textarea'), function() {
 	    populateElementIfNotSetYet($(this), $here);
 	});
     }
@@ -64,6 +64,10 @@ DummyFormFiller = (function() {
 	} else if ($element.is('[type=tel]')) {
 	    if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
 		$element.val(getDummyPhone());
+	    }
+	} else if ($element.is('textarea')) {
+	    if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
+		$element.val(chance.paragraph());
 	    }
 	}
     }
