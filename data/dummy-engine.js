@@ -7,7 +7,7 @@ DummyFormFiller = (function() {
 	var $here = $('html');
 
 	$.each($here.find('input, select'), function() {
-	    populateInputIfNotSetYet($(this), $here);
+	    populateElementIfNotSetYet($(this), $here);
 	});
     }
 
@@ -21,49 +21,49 @@ DummyFormFiller = (function() {
     var excludedNames = [];
 
     /**
-     * Populates given input  with a dummy value within parent's scope.
-     * Does not modify already populated input or input's family (that is defined by the 'name' attribute).
-     * Tries to figure out input's purpose, e.g. age, year.
-     * Ensures the value meets input's limitations, e.g. min, minlength.
+     * Populates given element with a dummy value within parent's scope.
+     * Does not modify already populated element or element's family (that is defined by the 'name' attribute).
+     * Tries to figure out element's purpose, e.g. age, year.
+     * Ensures the value meets element's limitations, e.g. min, minlength.
      */
-    function populateInputIfNotSetYet($input, $topParent) {
-	if ($input.is('[type=text]')) {
-	    if (isEmpty($input) && isVisible($input) && isEnabled($input)) {
-		populateWithRandomTextWisely($input);
+    function populateElementIfNotSetYet($element, $topParent) {
+	if ($element.is('[type=text]')) {
+	    if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
+		populateWithRandomTextWisely($element);
 	    }
-	} else if ($input.is('[type=email]')) {
-	    if (isEmpty($input) && isVisible($input) && isEnabled($input)) {
-		$input.val(dummyEmail);
+	} else if ($element.is('[type=email]')) {
+	    if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
+		$element.val(dummyEmail);
 	    }
-	} else if ($input.is('[type=radio]')) {
-	    var groupName = $input.prop('name');
-	    if (isVisible($input) && isEnabled($input) && !isExcluded(groupName)) {
+	} else if ($element.is('[type=radio]')) {
+	    var groupName = $element.prop('name');
+	    if (isVisible($element) && isEnabled($element) && !isExcluded(groupName)) {
 		var $radioInputs = findVisibleEnabledInputsByTypeAndName($topParent, 'radio', groupName);
 		if (!isAnyInputChecked($radioInputs)) {
 		    clickRandomInput($radioInputs);
 		}
 		excludedNames.push(groupName);
 	    }
-	} else if ($input.is('[type=checkbox]')) {
-	    var groupName = $input.prop('name');
-	    if (isVisible($input) && isEnabled($input) && !isExcluded(groupName)) {
+	} else if ($element.is('[type=checkbox]')) {
+	    var groupName = $element.prop('name');
+	    if (isVisible($element) && isEnabled($element) && !isExcluded(groupName)) {
 		var $checkboxInputs = findVisibleEnabledInputsByTypeAndName($topParent, 'checkbox', groupName);
 		if (!isAnyInputChecked($checkboxInputs)) {
 		    clickRandomInputs($checkboxInputs);
 		}
 		excludedNames.push(groupName);
 	    }
-	} else if ($input.is('select')) {
-	    if (isVisible($input) && isEnabled($input)) {
-		clickRandomOptionOrOptions($input);
+	} else if ($element.is('select')) {
+	    if (isVisible($element) && isEnabled($element)) {
+		clickRandomOptionOrOptions($element);
 	    }
-	} else if ($input.is('[type=number]')) {
-	    if (isEmpty($input) && isVisible($input) && isEnabled($input)) {
-		populateWithRandomNumberWisely($input);
+	} else if ($element.is('[type=number]')) {
+	    if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
+		populateWithRandomNumberWisely($element);
 	    }
-	} else if ($input.is('[type=tel]')) {
-	    if (isEmpty($input) && isVisible($input) && isEnabled($input)) {
-		$input.val(getDummyPhone());
+	} else if ($element.is('[type=tel]')) {
+	    if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
+		$element.val(getDummyPhone());
 	    }
 	}
     }
@@ -73,13 +73,13 @@ DummyFormFiller = (function() {
      * # MANIPULATORS #
      * ################
      */
-    function clickRandomInput($inputs) {
-	$(chance.pick($inputs)).click();
+    function clickRandomInput($elements) {
+	$(chance.pick($elements)).click();
     }
 
-    function clickRandomInputs($inputs) {
+    function clickRandomInputs($elements) {
 	var randomBoolean;
-	$.each($inputs, function() {
+	$.each($elements, function() {
 	    if (chance.bool() && isVisible($(this)) && isEnabled($(this))) {
 		$($(this)).click();
 	    }
@@ -88,13 +88,13 @@ DummyFormFiller = (function() {
     /**
      * Selects one option or, if 'multiple', random number of options.
      */
-    function clickRandomOptionOrOptions($input) {
-	if ($input.prop('multiple')) {
-	    $input.find('option').each(function() {
+    function clickRandomOptionOrOptions($select) {
+	if ($select.prop('multiple')) {
+	    $select.find('option').each(function() {
 		$(this).prop("selected", chance.bool());
 	    });
 	} else {
-	    $(chance.pick($input.find('option'))).prop("selected", true);
+	    $(chance.pick($select.find('option'))).prop("selected", true);
 	}
     }
 
@@ -211,16 +211,16 @@ DummyFormFiller = (function() {
 	return limitsToReturn;
     }
 
-    function isEmpty($input) {
-	return !$.trim($input.val());
+    function isEmpty($element) {
+	return !$.trim($element.val());
     }
 
-    function isVisible($input) {
-	return $input.is(":visible");
+    function isVisible($element) {
+	return $element.is(":visible");
     }
 
-    function isEnabled($input) {
-	return $input.is(":enabled");
+    function isEnabled($element) {
+	return $element.is(":enabled");
     }
 
     function isAnyInputChecked($inputs) {
@@ -241,12 +241,12 @@ DummyFormFiller = (function() {
      * - min/max length
      * - min/max value
      */
-    function defineLimits($input) {
+    function defineLimits($element) {
 	var limits = {};
-	var minlength = $input.attr('minlength');
-	var maxlength = $input.attr('maxlength');
-	var min = $input.attr('min');
-	var max = $input.attr('max');
+	var minlength = $element.attr('minlength');
+	var maxlength = $element.attr('maxlength');
+	var min = $element.attr('min');
+	var max = $element.attr('max');
 
 	if (minlength) {
 	    limits[MINLENGTH_LIMIT] = minlength;
@@ -261,7 +261,7 @@ DummyFormFiller = (function() {
 	    limits[MAX_LIMIT] = max;
 	}
 
-	logInfo($input, 'limits', limits);
+	logInfo($element, 'limits', limits);
 
 	return limits;
     }
@@ -374,17 +374,17 @@ DummyFormFiller = (function() {
     }
 
     /**
-     * Prints information next to the given input.
+     * Prints information next to the given element.
      * Doesn't log if there's nothing to show.
      */
-    function logInfo($input, key, value) {
+    function logInfo($element, key, value) {
 	if ((value && typeof value !== 'object') || (typeof value === 'object' && Object.keys(value).length !== 0)) {
-	    console.log('Input id=\'' + $input.prop('id') + '\'\t- ' + key + ': ' + JSON.stringify(value, null, 4));
+	    console.log('Element id=\'' + $element.prop('id') + '\'\t- ' + key + ': ' + JSON.stringify(value, null, 4));
 	}
     }
 
-    function pAlert($input) {
-	alert('Input data=\'' + JSON.stringify($input, null, 4));
+    function pAlert($element) {
+	alert('Element data=\'' + JSON.stringify($element, null, 4));
     }
 
     return engine;
