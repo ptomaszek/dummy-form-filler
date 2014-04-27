@@ -6,7 +6,7 @@ DummyFormFiller = (function() {
     engine.populateDummyData = function() {
 	var $here = $('html');
 
-	$.each($here.find('input'), function() {
+	$.each($here.find('input, select'), function() {
 	    populateInputIfNotSetYet($(this), $here);
 	});
     }
@@ -53,6 +53,10 @@ DummyFormFiller = (function() {
 		}
 		excludedNames.push(groupName);
 	    }
+	} else if ($input.is('select')) {
+	    if (isVisible($input) && isEnabled($input)) {
+		clickRandomOptionOrOptions($input);
+	    }
 	} else if ($input.is('[type=number]')) {
 	    if (isEmpty($input) && isVisible($input) && isEnabled($input)) {
 		populateWithRandomNumberWisely($input);
@@ -80,6 +84,18 @@ DummyFormFiller = (function() {
 		$($(this)).click();
 	    }
 	});
+    }
+    /**
+     * Selects one option or, if 'multiple', random number of options.
+     */
+    function clickRandomOptionOrOptions($input) {
+	if ($input.prop('multiple')) {
+	    $input.find('option').each(function() {
+		$(this).prop("selected", chance.bool());
+	    });
+	} else {
+	    $(chance.pick($input.find('option'))).prop("selected", true);
+	}
     }
 
     /**
@@ -358,13 +374,17 @@ DummyFormFiller = (function() {
     }
 
     /**
-    * Prints information next to the given input.
-    * Doesn't log if there's nothing to show.
-    */
+     * Prints information next to the given input.
+     * Doesn't log if there's nothing to show.
+     */
     function logInfo($input, key, value) {
 	if ((value && typeof value !== 'object') || (typeof value === 'object' && Object.keys(value).length !== 0)) {
 	    console.log('Input id=\'' + $input.prop('id') + '\'\t- ' + key + ': ' + JSON.stringify(value, null, 4));
 	}
+    }
+
+    function pAlert($input) {
+	alert('Input data=\'' + JSON.stringify($input, null, 4));
     }
 
     return engine;
