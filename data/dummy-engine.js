@@ -37,7 +37,7 @@ DummyFormFiller = (function() {
 	    }
 	} else if ($element.is('[type=radio]')) {
 	    var groupName = $element.prop('name');
-	    if (isVisible($element) && isEnabled($element) && !isExcluded(groupName)) {
+	    if (isEnabled($element) && !isExcluded(groupName)) {
 		var $radioInputs = findVisibleEnabledInputsByTypeAndName($topParent, 'radio', groupName);
 		if (!isAnyInputChecked($radioInputs)) {
 		    clickRandomInput($radioInputs);
@@ -91,14 +91,20 @@ DummyFormFiller = (function() {
     }
     /**
      * Selects one option or, if 'multiple', random number of options.
+     * Does not select single option if currently selected index higher than 0.
+     * Does not select multiple options if any already selected.
      */
     function clickRandomOptionOrOptions($select) {
 	if ($select.prop('multiple')) {
-	    $select.find('option').each(function() {
-		$(this).prop("selected", chance.bool());
-	    });
+	    if (isEmpty($select)) {
+		$select.find('option').each(function() {
+		    $(this).prop("selected", chance.bool());
+		});
+	    }
 	} else {
-	    $(chance.pick($select.find('option'))).prop("selected", true);
+	    if ($select.prop("selectedIndex") <= 0) {
+		$(chance.pick($select.find('option'))).prop("selected", true);
+	    }
 	}
     }
 
