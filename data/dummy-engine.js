@@ -64,6 +64,10 @@ DummyFormFiller = (function() {
 			if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
 				populateWithRandomNumberWisely($element);
 			}
+		} else if ($element.is('[type=date]')) {
+            if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
+                populateWithRandomNumberWisely($element, YEAR_PURPOSE);
+            }
         } else if ($element.is('[type=tel]')) {
 			if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
 				$element.val(getDummyPhone());
