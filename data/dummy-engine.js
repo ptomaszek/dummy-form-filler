@@ -64,7 +64,7 @@ DummyFormFiller = (function() {
 			if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
 				populateWithRandomNumberWisely($element);
 			}
-		} else if ($element.is('[type=tel]')) {
+        } else if ($element.is('[type=tel]')) {
 			if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
 				$element.val(getDummyPhone());
 			}
@@ -152,7 +152,7 @@ DummyFormFiller = (function() {
 			break;
 		case UNDEFINED_PURPOSE:
 		default:
-			$input.val(getDummyNumber());
+			$input.val(getDummyNumber(limits));
 		}
 	}
 
@@ -337,8 +337,8 @@ DummyFormFiller = (function() {
 			});
 		}
 
-		var min = limits[MIN_LIMIT];
-		var max = limits[MAX_LIMIT];
+		var min = Number(limits[MIN_LIMIT]);
+		var max = Number(limits[MAX_LIMIT]);
 
 		if (min > max) {
 			return -1
