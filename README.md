@@ -18,6 +18,7 @@ Useful for web developers and testers.**
  - number
  - tel
  - password
+ - date
  
 ####Installation:
 Download **bin/dummy-form-filler.xpi** file and drag it over a Firefox window. A new icon should appear on the Toolbar.
