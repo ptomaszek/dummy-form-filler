@@ -315,11 +315,11 @@ DummyFormFiller = (function() {
 	}
 
 	function findInputsByTypeAndName($here, type, name) {
-		return $here.find('input[type=' + type + '][name=' + name + ']');
+		return $here.find('input[type=' + type + '][name="' + name + '"]');
 	}
 
 	function findVisibleEnabledInputsByTypeAndName($here, type, name) {
-		return $here.find('input[type=' + type + '][name=' + name + ']:visible:enabled');
+		return $here.find('input[type=' + type + '][name="' + name + '"]:visible:enabled');
 	}
 
 	function isExcluded(groupName) {
