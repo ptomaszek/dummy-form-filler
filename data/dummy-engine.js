@@ -36,6 +36,10 @@ DummyFormFiller = (function() {
 			if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
 				$element.val(dummyEmail);
 			}
+		} else if ($element.is('[type=url]')) {
+			if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
+				$element.val('http://' + chance.domain());
+			}
 		} else if ($element.is('[type=radio]')) {
 			var groupName = $element.prop('name');
 			if (isEnabled($element) && !isExcluded(groupName)) {
