@@ -70,7 +70,7 @@ DummyFormFiller = (function() {
 			}
 		} else if ($element.is('[type=date]')) {
 			if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
-				populateWithRandomNumberWisely($element, YEAR_PURPOSE);
+				populateWithRandomDateWisely($element);
 			}
 		} else if ($element.is('[type=tel]')) {
 			if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
@@ -161,6 +161,22 @@ DummyFormFiller = (function() {
 		case UNDEFINED_PURPOSE:
 		default:
 			$input.val(getDummyNumber(limits));
+		}
+	}
+
+	/**
+	 * Populates given input with random date. Considers: - min and max properties
+	 */
+	function populateWithRandomDateWisely($input, inputPurpose) {
+		var limits = defineLimits($input);
+		var yearLimits = getOrCreateMinAndMaxLimits(YEAR_PURPOSE, limits);
+		var date;
+		while (true) {
+			date = chance.date();
+			if ((!(MAX_LIMIT in limits) || date <= new Date(limits[MAX_LIMIT])) && (!(MIN_LIMIT in limits) || date >= new Date(limits[MIN_LIMIT]))) {
+				$input.val(date.toISOString().split('T')[0]);
+				break;
+			}
 		}
 	}
 
