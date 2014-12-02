@@ -288,6 +288,10 @@ DummyFormFiller = (function() {
 		if (max) {
 			limits[MAX_LIMIT] = max;
 		}
+		if (max && min && $element.attr('type') == 'date' && (new Date(min) > new Date(max))) {
+			delete limits[MIN_LIMIT];
+			delete limits[MAX_LIMIT];
+		}
 
 		logInfo($element, 'limits', limits);
 
