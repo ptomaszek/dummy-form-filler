@@ -116,7 +116,7 @@ DummyFormFiller = (function() {
 			break;
 		case UNDEFINED_PURPOSE:
 		default:
-			$input.val(getDummyText());
+			$input.val(getDummyText(getOrCreateMinlengthAndMaxlengthLimits(null, $input)));
 		}
 	}
 
@@ -174,7 +174,7 @@ DummyFormFiller = (function() {
 	var MAX_LIMIT = 'max_limit';
 
 	/**
-	 * Checks if 'limits' contains min and max values. If yes, they are
+	 * Checks if 'limits' contain min and max values. If yes, they are
 	 * returned. Otherwise new values are created for provided purpose.
 	 */
 	function getOrCreateMinAndMaxLimits(purpose, $input) {
@@ -215,6 +215,51 @@ DummyFormFiller = (function() {
 
 		return limitsToReturn;
 	}
+	/**
+     	 * Checks if 'limits' contain min and max values. If yes, they are
+     	 * returned. Otherwise new values are created for provided purpose.
+     	 */
+     	function getOrCreateMinlengthAndMaxlengthLimits(purpose, $input) {
+            var limits = readLimits($input);
+     		var limitsToReturn = {};
+
+     		if (MINLENGTH_LIMIT in limits && MAXLENGTH_LIMIT in limits) {
+     		    if(limits[MINLENGTH_LIMIT] > limits[MAXLENGTH_LIMIT]){
+     		        limitsToReturn[MINLENGTH_LIMIT] = -1;
+                    limitsToReturn[MAXLENGTH_LIMIT] = -1;
+
+		            logInfo($input, 'read/created limits', limitsToReturn);
+                    return limitsToReturn;
+               	}
+
+     			return limits;
+     		}
+
+     		var min = 5;
+     		var max = 10;
+
+     		if (!(MINLENGTH_LIMIT in limits) && !(MAXLENGTH_LIMIT in limits)) {
+     			limitsToReturn[MINLENGTH_LIMIT] = min;
+     			limitsToReturn[MAXLENGTH_LIMIT] = max;
+     			return limitsToReturn;
+     		}
+
+     		if (MINLENGTH_LIMIT in limits) {
+     			limitsToReturn[MINLENGTH_LIMIT] = limits[MINLENGTH_LIMIT];
+     		} else {
+     			limitsToReturn[MINLENGTH_LIMIT] = min < limits[MAXLENGTH_LIMIT] ? min : limits[MAXLENGTH_LIMIT];
+     		}
+
+     		if (MAXLENGTH_LIMIT in limits) {
+     			limitsToReturn[MAXLENGTH_LIMIT] = limits[MAXLENGTH_LIMIT];
+     		} else {
+     			limitsToReturn[MAXLENGTH_LIMIT] = max > limits[MINLENGTH_LIMIT] ? max : limits[MINLENGTH_LIMIT];
+     		}
+
+		    logInfo($input, 'read/created limits', limitsToReturn);
+
+     		return limitsToReturn;
+     	}
 
 	function isEmptyVisibleAndEnabled($element) {
 		return isEmpty($element) && isVisible($element) && isEnabled($element);
@@ -272,7 +317,7 @@ DummyFormFiller = (function() {
 			delete limits[MAX_LIMIT];
 		}
 
-		logInfo($element, 'limits', limits);
+		logInfo($element, 'original limits', limits);
 
 		return limits;
 	}
@@ -360,14 +405,26 @@ DummyFormFiller = (function() {
 	 * Returns random text of a length of 5 to 10 characters. First letter
 	 * uppercased.
 	 */
-	function getDummyText() {
-		var text = $.trim(chance.string({
-			length : chance.natural({
-				min : 5,
-				max : 10
-			}),
-			pool : DEI_KOBOL
-		}));
+	function getDummyText(limits) {
+	    var text = '';
+		if (typeof limits === 'undefined') {
+            text = $.trim(chance.string({
+                length : chance.natural({
+                    min : 5,
+                    max : 10
+                }),
+                pool : DEI_KOBOL
+            }));
+		} else {
+		    text = $.trim(chance.string({
+                length : chance.natural({
+                    min :  parseFloat(limits[MINLENGTH_LIMIT]),
+                    max :  parseFloat(limits[MAXLENGTH_LIMIT])
+                }),
+                pool : DEI_KOBOL
+            }));
+        }
+
 		return chance.capitalize(text);
 	}
 
