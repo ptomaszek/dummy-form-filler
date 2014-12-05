@@ -28,18 +28,13 @@ DummyFormFiller = (function() {
 	 * minlength.
 	 */
 	function populateElementIfNotSetYet($element, $topParent) {
-		if ($element.is('[type=text]')) {
-			if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
+		if ($element.is('[type=text]') && isEmptyVisibleAndEnabled($element)) {
 				populateWithRandomTextWisely($element);
-			}
-		} else if ($element.is('[type=email]')) {
-			if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
+		}
+		else if ($element.is('[type=email]') && isEmptyVisibleAndEnabled($element)) {
 				$element.val(dummyEmail);
-			}
-		} else if ($element.is('[type=url]')) {
-			if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
+		} else if ($element.is('[type=url]') && isEmptyVisibleAndEnabled($element)) {
 				$element.val('http://' + chance.domain());
-			}
 		} else if ($element.is('[type=radio]')) {
 			var groupName = $element.prop('name');
 			if (isEnabled($element) && !isExcluded(groupName)) {
@@ -58,28 +53,18 @@ DummyFormFiller = (function() {
 				}
 				excludedNames.push(groupName);
 			}
-		} else if ($element.is('[type=password]')) {
+		} else if ($element.is('[type=password]') && isEmptyVisibleAndEnabled($element)) {
 			$element.val("0Pa$$4uM^t3");
-		} else if ($element.is('select')) {
-			if (isVisible($element) && isEnabled($element)) {
+		} else if ($element.is('select') && isEmptyVisibleAndEnabled($element)) {
 				clickRandomOptionOrOptions($element);
-			}
-		} else if ($element.is('[type=number]')) {
-			if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
+		} else if ($element.is('[type=number]') && isEmptyVisibleAndEnabled($element)) {
 				populateWithRandomNumberWisely($element);
-			}
-		} else if ($element.is('[type=date]')) {
-			if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
-				populateWithRandomNumberWisely($element, YEAR_PURPOSE);
-			}
-		} else if ($element.is('[type=tel]')) {
-			if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
+		} else if ($element.is('[type=date]') && isEmptyVisibleAndEnabled($element)) {
+                populateWithRandomNumberWisely($element, YEAR_PURPOSE);
+        } else if ($element.is('[type=tel]') && isEmptyVisibleAndEnabled($element)) {
 				$element.val(getDummyPhone());
-			}
-		} else if ($element.is('textarea')) {
-			if (isEmpty($element) && isVisible($element) && isEnabled($element)) {
+		} else if ($element.is('textarea') && isEmptyVisibleAndEnabled($element)) {
 				$element.val(chance.paragraph());
-			}
 		}
 	}
 
@@ -105,11 +90,9 @@ DummyFormFiller = (function() {
 	 */
 	function clickRandomOptionOrOptions($select) {
 		if ($select.prop('multiple')) {
-			if (isEmpty($select)) {
-				$select.find('option').each(function() {
-					$(this).prop("selected", chance.bool());
-				});
-			}
+            $select.find('option').each(function() {
+                $(this).prop("selected", chance.bool());
+            });
 		} else {
 			if ($select.prop("selectedIndex") <= 0) {
 				$(chance.pick($select.find('option'))).prop("selected", true);
@@ -124,7 +107,6 @@ DummyFormFiller = (function() {
 	 */
 	function populateWithRandomTextWisely($input) {
 		var inputPurpose = defineInputPurpose($input);
-		var limits = defineLimits($input);
 
 		switch (inputPurpose) {
 		case PHONE_PURPOSE:
@@ -144,23 +126,22 @@ DummyFormFiller = (function() {
 	 */
 	function populateWithRandomNumberWisely($input, inputPurpose) {
 		inputPurpose = (typeof inputPurpose !== 'undefined') ? inputPurpose : defineInputPurpose($input);
-		var limits = defineLimits($input);
 
 		switch (inputPurpose) {
 		case PHONE_PURPOSE:
 			$input.val(getDummyPhone());
 			break;
 		case AGE_PURPOSE:
-			var ageLimits = getOrCreateMinAndMaxLimits(AGE_PURPOSE, limits);
+			var ageLimits = getOrCreateMinAndMaxLimits(AGE_PURPOSE, $input);
 			$input.val(getDummyNumber(ageLimits));
 			break;
 		case YEAR_PURPOSE:
-			var yearLimits = getOrCreateMinAndMaxLimits(YEAR_PURPOSE, limits);
+			var yearLimits = getOrCreateMinAndMaxLimits(YEAR_PURPOSE, $input);
 			$input.val(getDummyNumber(yearLimits));
 			break;
 		case UNDEFINED_PURPOSE:
 		default:
-			$input.val(getDummyNumber(limits));
+			$input.val(getDummyNumber(getOrCreateMinAndMaxLimits(null, $input)));
 		}
 	}
 
@@ -186,8 +167,8 @@ DummyFormFiller = (function() {
 	 * Checks if 'limits' contains min and max values. If yes, they are
 	 * returned. Otherwise new values are created for provided purpose.
 	 */
-	function getOrCreateMinAndMaxLimits(purpose, limits) {
-
+	function getOrCreateMinAndMaxLimits(purpose, $input) {
+        var limits = readLimits($input);
 		if (MIN_LIMIT in limits && MAX_LIMIT in limits) {
 			return limits;
 		}
@@ -225,6 +206,10 @@ DummyFormFiller = (function() {
 		return limitsToReturn;
 	}
 
+	function isEmptyVisibleAndEnabled($element) {
+		return isEmpty($element) && isVisible($element) && isEnabled($element);
+	}
+
 	function isEmpty($element) {
 		return !$.trim($element.val());
 	}
@@ -253,7 +238,7 @@ DummyFormFiller = (function() {
 	/**
 	 * Returns an array of limits, i.e.: - min/max length - min/max value
 	 */
-	function defineLimits($element) {
+	function readLimits($element) {
 		var limits = {};
 		var minlength = $element.attr('minlength');
 		var maxlength = $element.attr('maxlength');

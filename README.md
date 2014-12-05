@@ -9,16 +9,9 @@ Useful for web developers and testers.**
 - Works out of the box.
 - Perceives semantic hints (e.g. label 'Age', 'Year') and limitations (e.g. min, minlength)
 - Supported elements:
- - text
- - email
- - radio
- - checkbox
+ - input: text, email, number, radio, checkbox, tel, password, date, url
  - select
  - textarea
- - number
- - tel
- - password
- - date
  
 ####Installation:
 Download **bin/dummy-form-filler.xpi** file and drag it over a Firefox window. A new icon should appear on the Toolbar.
