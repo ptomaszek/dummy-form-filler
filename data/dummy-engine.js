@@ -232,7 +232,7 @@ DummyFormFiller = (function() {
                 limitsToReturn[MINLENGTH_LIMIT] = -1;
                 limitsToReturn[MAXLENGTH_LIMIT] = -1;
 
-                logInfo($input, 'read/created limits', limitsToReturn);
+                DummyLogger.log($input, 'read/created limits', limitsToReturn);
                 return limitsToReturn;
             }
 
@@ -260,7 +260,7 @@ DummyFormFiller = (function() {
             limitsToReturn[MAXLENGTH_LIMIT] = max > limits[MINLENGTH_LIMIT] ? max : limits[MINLENGTH_LIMIT];
         }
 
-        logInfo($input, 'read/created limits', limitsToReturn);
+        DummyLogger.log($input, 'read/created limits', limitsToReturn);
 
         return limitsToReturn;
     }
@@ -321,7 +321,7 @@ DummyFormFiller = (function() {
 			limits[MAX_LIMIT] = max;
 		}
 
-		logInfo($element, 'original limits', limits);
+		DummyLogger.log($element, 'original limits', limits);
 
 		return limits;
 	}
@@ -334,7 +334,7 @@ DummyFormFiller = (function() {
 		var purposeByLabel = defineInputPurposeByLabel($input);
 
 		if (typeof purposeByLabel !== UNDEFINED_PURPOSE) {
-			logInfo($input, 'purpose', purposeByLabel);
+			DummyLogger.log($input, 'purpose', purposeByLabel);
 			return purposeByLabel;
 		}
 
@@ -439,16 +439,6 @@ DummyFormFiller = (function() {
 		return chance.phone({
 			formatted : false
 		});
-	}
-
-	/**
-	 * Prints information next to the given element. Doesn't log if there's
-	 * nothing to show.
-	 */
-	function logInfo($element, key, value) {
-		if ((value && typeof value !== 'object') || (typeof value === 'object' && Object.keys(value).length !== 0)) {
-			console.log('Element id=\'' + $element.prop('id') + '\'\t- ' + key + ': ' + JSON.stringify(value, null, 4));
-		}
 	}
 
 	return engine;
