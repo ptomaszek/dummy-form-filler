@@ -24,35 +24,70 @@
     <input id="6" type="radio" name="oth" value="oth">Other radio group ('different name')
     <br>
     <input id="7" type="checkbox" name="chkFamily" value="b1">Bum
-    <input id="7" type="checkbox" name="chkFamily" value="b2">Bum2
+    <input id="8" type="checkbox" name="chkFamily" value="b2">Bum2
     <br>
-    <label for="mle">Your phone no</label>
+    <label for="mle">Your phone no:</label>
     <input type="text" id='mle' value="">
     <br>
-    <label for="ag">His age, or her</label>
+    <label for="ag">His age, or her:</label>
     <input type="text" id='ag' value="">
     <br>
-    <label for="yea">That year</label>
+    <label for="yea">That year:</label>
     <input type="text" id='yea' value="">
     <br>
-
-    <label for="minMaxWrong">Invalid min/max values</label>
+    <br>
+    <label for="pass">Password:</label>
+    <input type="password" id='pass'>
+    <br>
+    <label for="passc">Confirm password:</label>
+    <input type="password" id='passc'>
+    <br>
+    <label for="minMaxWrong">Invalid min/max values:</label>
     <input type="number" id='minMaxWrong' min=130 max="120">
     <br>
 
-    <select multiple>
-        <option value="volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option selected value="opel">Opel</option>
-        <option value="audi">Audi</option>
+    Select single:
+    <select>
+    <option disabled selected> -- select an option -- </option>
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="opel">Opel</option>
+    <option value="audi">Audi</option>
     </select>
     <br>
-    <textarea ></textarea>
+
+    Select multiple:
+    <select multiple>
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="opel">Opel</option>
+    <option value="audi">Audi</option>
+    </select>
     <br>
+
+    Already selected:
+    <select multiple>
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option selected value="opel">Opel</option>
+    <option value="audi">Audi</option>
+    </select>
+    <br>
+    Textarea: <textarea ></textarea>
+    <br>
+    Url:
     <input type="url" name="blog" size="25"
-           value="">
+    value="">
     <br>
-    <input name="myDate" type="date" min="2020-03-10" max="2030-03-16">
+    Date:
+    <input name="myDate" type="date">
+    <br>
+    Date with limits:
+    <input name="myDate" type="date" min="2030" max="2030-03-16">
+    <br>
+    <br>
+    Date with wrong limits:
+    <input name="myDate" type="date" min="2031" max="2030-03-16">
     <br>
 </form>
 
