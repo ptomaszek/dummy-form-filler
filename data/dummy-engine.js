@@ -152,8 +152,8 @@ DummyFormFiller = (function() {
 		var limits = getOrCreateMinAndMaxLimits(YEAR_PURPOSE, $input);
 
         var date = chance.date({
-            min: new Date(limits[MIN_LIMIT]),
-            max: new Date(limits[MAX_LIMIT])
+            min: new Date(limits[MIN_LIMIT].toString()),
+            max: new Date(limits[MAX_LIMIT].toString())
         });
 
         $input.val(date.toISOString().split('T')[0]);
@@ -220,50 +220,50 @@ DummyFormFiller = (function() {
 		return limitsToReturn;
 	}
 	/**
-     	 * Checks if 'limits' contain min and max values. If yes, they are
-     	 * returned. Otherwise new values are created for provided purpose.
-     	 */
-     	function getOrCreateMinlengthAndMaxlengthLimits(purpose, $input) {
-            var limits = readLimits($input);
-     		var limitsToReturn = {};
+     * Checks if 'limits' contain min and max values. If yes, they are
+     * returned. Otherwise new values are created for provided purpose.
+     */
+    function getOrCreateMinlengthAndMaxlengthLimits(purpose, $input) {
+        var limits = readLimits($input);
+        var limitsToReturn = {};
 
-     		if (MINLENGTH_LIMIT in limits && MAXLENGTH_LIMIT in limits) {
-     		    if(limits[MINLENGTH_LIMIT] > limits[MAXLENGTH_LIMIT]){
-     		        limitsToReturn[MINLENGTH_LIMIT] = -1;
-                    limitsToReturn[MAXLENGTH_LIMIT] = -1;
+        if (MINLENGTH_LIMIT in limits && MAXLENGTH_LIMIT in limits) {
+            if(limits[MINLENGTH_LIMIT] > limits[MAXLENGTH_LIMIT]){
+                limitsToReturn[MINLENGTH_LIMIT] = -1;
+                limitsToReturn[MAXLENGTH_LIMIT] = -1;
 
-		            logInfo($input, 'read/created limits', limitsToReturn);
-                    return limitsToReturn;
-               	}
+                logInfo($input, 'read/created limits', limitsToReturn);
+                return limitsToReturn;
+            }
 
-     			return limits;
-     		}
+            return limits;
+        }
 
-     		var min = 5;
-     		var max = 10;
+        var min = 5;
+        var max = 10;
 
-     		if (!(MINLENGTH_LIMIT in limits) && !(MAXLENGTH_LIMIT in limits)) {
-     			limitsToReturn[MINLENGTH_LIMIT] = min;
-     			limitsToReturn[MAXLENGTH_LIMIT] = max;
-     			return limitsToReturn;
-     		}
+        if (!(MINLENGTH_LIMIT in limits) && !(MAXLENGTH_LIMIT in limits)) {
+            limitsToReturn[MINLENGTH_LIMIT] = min;
+            limitsToReturn[MAXLENGTH_LIMIT] = max;
+            return limitsToReturn;
+        }
 
-     		if (MINLENGTH_LIMIT in limits) {
-     			limitsToReturn[MINLENGTH_LIMIT] = limits[MINLENGTH_LIMIT];
-     		} else {
-     			limitsToReturn[MINLENGTH_LIMIT] = min < limits[MAXLENGTH_LIMIT] ? min : limits[MAXLENGTH_LIMIT];
-     		}
+        if (MINLENGTH_LIMIT in limits) {
+            limitsToReturn[MINLENGTH_LIMIT] = limits[MINLENGTH_LIMIT];
+        } else {
+            limitsToReturn[MINLENGTH_LIMIT] = min < limits[MAXLENGTH_LIMIT] ? min : limits[MAXLENGTH_LIMIT];
+        }
 
-     		if (MAXLENGTH_LIMIT in limits) {
-     			limitsToReturn[MAXLENGTH_LIMIT] = limits[MAXLENGTH_LIMIT];
-     		} else {
-     			limitsToReturn[MAXLENGTH_LIMIT] = max > limits[MINLENGTH_LIMIT] ? max : limits[MINLENGTH_LIMIT];
-     		}
+        if (MAXLENGTH_LIMIT in limits) {
+            limitsToReturn[MAXLENGTH_LIMIT] = limits[MAXLENGTH_LIMIT];
+        } else {
+            limitsToReturn[MAXLENGTH_LIMIT] = max > limits[MINLENGTH_LIMIT] ? max : limits[MINLENGTH_LIMIT];
+        }
 
-		    logInfo($input, 'read/created limits', limitsToReturn);
+        logInfo($input, 'read/created limits', limitsToReturn);
 
-     		return limitsToReturn;
-     	}
+        return limitsToReturn;
+    }
 
 	function isEmptyVisibleAndEnabled($element) {
 		return isEmpty($element) && isVisible($element) && isEnabled($element);
@@ -319,10 +319,6 @@ DummyFormFiller = (function() {
 		}
 		if (max) {
 			limits[MAX_LIMIT] = max;
-		}
-		if (max && min && $element.attr('type') == 'date' && (new Date(min) > new Date(max))) {
-			delete limits[MIN_LIMIT];
-			delete limits[MAX_LIMIT];
 		}
 
 		logInfo($element, 'original limits', limits);
