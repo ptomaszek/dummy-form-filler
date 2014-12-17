@@ -269,6 +269,10 @@ DummyFormFiller = (function() {
 		return isEmpty($element) && isVisible($element) && isEnabled($element);
 	}
 
+	function isEmptyVisibleAndEnabled($element) {
+		return isEmpty($element) && isVisible($element) && isEnabled($element);
+	}
+
 	function isEmpty($element) {
 		return !$.trim($element.val());
 	}
