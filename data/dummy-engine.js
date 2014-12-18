@@ -2,9 +2,11 @@ var DummyFormFiller = {};
 
 DummyFormFiller = (function() {
 	var engine = {};
+    var _augur;
 
 	engine.populateDummyData = function() {
 		var $here = $('html');
+        _augur = new DummyAugur();
 
 		$.each($here.find('input, select, textarea'), function() {
 			populateElementIfNotSetYet($(this), $here);
@@ -106,15 +108,15 @@ DummyFormFiller = (function() {
 	 * label to guess input's role, e.g. age, year
 	 */
 	function populateWithRandomTextWisely($input) {
-		var inputPurpose = defineInputPurpose($input);
+		var inputPurpose = _augur.defineInputPurpose($input);
 
 		switch (inputPurpose) {
-		case PHONE_PURPOSE:
-		case AGE_PURPOSE:
-		case YEAR_PURPOSE:
+		case DummyPurposeEnum.PHONE_PURPOSE:
+		case DummyPurposeEnum.AGE_PURPOSE:
+		case DummyPurposeEnum.YEAR_PURPOSE:
 			populateWithRandomNumberWisely($input, inputPurpose);
 			break;
-		case UNDEFINED_PURPOSE:
+		case DummyPurposeEnum.UNDEFINED_PURPOSE:
 		default:
 			$input.val(getDummyText(getOrCreateMinlengthAndMaxlengthLimits(null, $input)));
 		}
@@ -125,21 +127,21 @@ DummyFormFiller = (function() {
 	 * properties - name and label to guess input's role, e.g. age, year
 	 */
 	function populateWithRandomNumberWisely($input, inputPurpose) {
-		inputPurpose = (typeof inputPurpose !== 'undefined') ? inputPurpose : defineInputPurpose($input);
+		inputPurpose = (typeof inputPurpose !== 'undefined') ? inputPurpose : _augur.defineInputPurpose($input);
 
 		switch (inputPurpose) {
-		case PHONE_PURPOSE:
+		case DummyPurposeEnum.PHONE_PURPOSE:
 			$input.val(getDummyPhone());
 			break;
-		case AGE_PURPOSE:
-			var ageLimits = getOrCreateMinAndMaxLimits(AGE_PURPOSE, $input);
+		case DummyPurposeEnum.AGE_PURPOSE:
+			var ageLimits = getOrCreateMinAndMaxLimits(DummyPurposeEnum.AGE_PURPOSE, $input);
 			$input.val(getDummyNumber(ageLimits));
 			break;
-		case YEAR_PURPOSE:
-			var yearLimits = getOrCreateMinAndMaxLimits(YEAR_PURPOSE, $input);
+		case DummyPurposeEnum.YEAR_PURPOSE:
+			var yearLimits = getOrCreateMinAndMaxLimits(DummyPurposeEnum.YEAR_PURPOSE, $input);
 			$input.val(getDummyNumber(yearLimits));
 			break;
-		case UNDEFINED_PURPOSE:
+		case DummyPurposeEnum.UNDEFINED_PURPOSE:
 		default:
 			$input.val(getDummyNumber(getOrCreateMinAndMaxLimits(null, $input)));
 		}
@@ -149,7 +151,7 @@ DummyFormFiller = (function() {
 	 * Populates given input with random date. Considers: - min and max properties
 	 */
 	function populateWithRandomDateWisely($input) {
-		var limits = getOrCreateMinAndMaxLimits(YEAR_PURPOSE, $input);
+		var limits = getOrCreateMinAndMaxLimits(DummyPurposeEnum.YEAR_PURPOSE, $input);
 
         var date = chance.date({
             min: new Date(limits[MIN_LIMIT].toString()),
@@ -162,14 +164,6 @@ DummyFormFiller = (function() {
 	/*
 	 * ################ ### HELPERS #### ################
 	 */
-
-	/** Input purposes */
-	var UNDEFINED_PURPOSE = 'undefined_purpose';
-	var PHONE_PURPOSE = 'phone_purpose';
-	var AGE_PURPOSE = 'age_purpose';
-	var YEAR_PURPOSE = 'year_purpose';
-	var NAME_PURPOSE = 'name_purpose';
-	var POSTCODE_PURPOSE = 'postcode_purpose';
 
 	/** Limit types */
 	var MINLENGTH_LIMIT = 'minlength_limit';
@@ -191,10 +185,10 @@ DummyFormFiller = (function() {
 		var max = 100;
 		var limitsToReturn = {};
 
-		if (AGE_PURPOSE === purpose) {
+		if (DummyPurposeEnum.AGE_PURPOSE === purpose) {
 			min = 21;
 			max = 75;
-		} else if (YEAR_PURPOSE === purpose) {
+		} else if (DummyPurposeEnum.YEAR_PURPOSE === purpose) {
 			min = 1940;
 			max = 2015;
 		}
@@ -324,46 +318,6 @@ DummyFormFiller = (function() {
 		DummyLogger.log($element, 'original limits', limits);
 
 		return limits;
-	}
-
-	/**
-	 * Considers: - min and max properties - name and label to guess input's
-	 * role, e.g. age, year
-	 */
-	function defineInputPurpose($input) {
-		var purposeByLabel = defineInputPurposeByLabel($input);
-
-		if (typeof purposeByLabel !== UNDEFINED_PURPOSE) {
-			DummyLogger.log($input, 'purpose', purposeByLabel);
-			return purposeByLabel;
-		}
-
-		return UNDEFINED_PURPOSE;
-	}
-
-	function containsText(searchFor, inString) {
-		return inString.toLowerCase().indexOf(searchFor) >= 0;
-	}
-
-	/**
-	 * Considers label text: - phone - age - year
-	 */
-	function defineInputPurposeByLabel($input) {
-		var labelText = '';
-
-		if ($input.prop('id')) {
-			labelText = $('label[for="' + $input.prop('id') + '"]').text();
-		}
-
-		if (containsText('phone', labelText)) {
-			return PHONE_PURPOSE;
-		} else if (containsText('age', labelText)) {
-			return AGE_PURPOSE;
-		} else if (containsText('year', labelText)) {
-			return YEAR_PURPOSE;
-		}
-
-		return UNDEFINED_PURPOSE;
 	}
 
 	function findInputsByTypeAndName($here, type, name) {
