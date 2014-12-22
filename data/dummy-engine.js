@@ -112,7 +112,7 @@ var DummyFormFiller = function() {
 		case DummyPurposeEnum.PHONE_PURPOSE:
 		case DummyPurposeEnum.AGE_PURPOSE:
 		case DummyPurposeEnum.YEAR_PURPOSE:
-			populateWithRandomNumberWisely($input, DummyPurposeEnum.YEAR_PURPOSE);
+			populateWithRandomNumberWisely($input, inputPurpose);
 			break;
 		case DummyPurposeEnum.UNDEFINED_PURPOSE:
 		default:
@@ -149,27 +149,52 @@ var DummyFormFiller = function() {
 	 * Populates given input with random date. Considers: - min and max properties
 	 */
 	function populateWithRandomDateWisely($input) {
-		var limits = getOrCreateMinAndMaxLimits(DummyPurposeEnum.YEAR_PURPOSE, $input);
+		var limits = getOrCreateMinAndMaxDateLimits($input);
 
         var date = null;
 
         try {
             date = chance.date({
-                min: new Date(limits.min.toString()),
-                max: new Date(limits.max.toString())
+                min: limits.min,
+                max: limits.max
             });
-            date = date.toISOString().split('T')[0];
         }
         catch(err) {
            DummyLogger.log(err);
+           return;
         }
 
-        $input.val(date);
+        $input.val(date.toISOString().split('T')[0]);
 	}
 
 	/*
 	 * ################ ### HELPERS #### ################
 	 */
+
+	function getOrCreateMinAndMaxDateLimits($input) {
+        var limits = new DummyDateLimits($input);
+
+		if (limits.isMinMaxGiven()) {
+			return limits;
+		} else if (limits.min == null && limits.max != null){
+             limits.min = new Date(chance.date({
+                 min : new Date(new Date(limits.max).setFullYear(limits.max.getFullYear() - 10)),
+                 max : limits.max
+             }));
+         } else if (limits.max == null && limits.min != null){
+             limits.max = new Date(chance.date({
+                 min : limits.min,
+                 max : new Date(new Date(limits.min).setFullYear(limits.min.getFullYear() + 10))
+             }));
+         } else {
+            limits.min = new Date('1940');
+            limits.max = new Date('2015');
+         }
+
+        DummyLogger.log($input, 'created limits', limits);
+
+		return limits;
+	}
 
 	/**
 	 * Checks if 'limits' contain min and max values. If yes, they are
@@ -178,23 +203,27 @@ var DummyFormFiller = function() {
 	function getOrCreateMinAndMaxLimits(purpose, $input) {
         var limits = new DummyLimits($input);
 
-		if (limits.min != null && limits.max != null) {
+		if (limits.isMinMaxGiven()) {
 			return limits;
-		}
-
-		var min = 1;
-		var max = 100;
-
-		if (DummyPurposeEnum.AGE_PURPOSE === purpose) {
-			min = 21;
-			max = 75;
-		} else if (DummyPurposeEnum.YEAR_PURPOSE === purpose) {
-			min = 1940;
-			max = 2015;
-		}
-
-        limits.min = Number(min);
-        limits.max = Number(max);
+		} else if (limits.min == null && limits.max != null){
+             limits.min = Number(chance.natural({
+                 min : 1,
+                 max : limits.maxlength
+                 }));
+         } else if (limits.max == null && limits.min != null){
+             limits.max = Number(chance.natural({
+                 min : limits.minlength,
+                 max : limits.minlength + 5
+                 }));
+         } else {
+            if (DummyPurposeEnum.AGE_PURPOSE === purpose) {
+                limits.min = Number(21);
+                limits.max = Number(75);
+            } else if (DummyPurposeEnum.YEAR_PURPOSE === purpose) {
+                limits.min= Number(1940);
+                limits.max = Number(2015);
+            }
+         }
 
         DummyLogger.log($input, 'created limits', limits);
 
@@ -206,24 +235,22 @@ var DummyFormFiller = function() {
      */
     function getOrCreateMinlengthAndMaxlengthLimits($input) {
         var limits = new DummyLimits($input);
-        console.log('#######################');
 
-		if (limits.minlength != null && limits.maxlength != null) {
+		if (limits.isMinlengthMaxlengthGiven()) {
 			return limits;
-		}
-
-        if(limits.minlength == null){
+		} else if (limits.minlength == null && limits.maxlength != null){
             limits.minlength = Number(chance.natural({
                 min : 1,
                 max : limits.maxlength
                 }));
-        }
-
-        if(limits.maxlength == null){
+        } else if (limits.maxlength == null && limits.minlength != null){
             limits.maxlength = Number(chance.natural({
                 min : limits.minlength,
                 max : limits.minlength + 5
                 }));
+        } else {
+		    limits.minlength = 1;
+		    limits.maxlength = 15;
         }
 
         DummyLogger.log($input, 'adjusted limits', limits);

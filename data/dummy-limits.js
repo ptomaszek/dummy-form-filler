@@ -7,6 +7,7 @@ function DummyLimits($element) {
     this.toNumberOrNull = function(value) {
         return value == null ? null : Number(value);
     }
+
     if(typeof $element !== 'undefined'){
         this.minlength = this.toNumberOrNull($element.attr('minlength'));
         this.maxlength = this.toNumberOrNull($element.attr('maxlength'));
@@ -22,5 +23,25 @@ function DummyLimits($element) {
 
     this.isMinlengthMaxlengthGiven = function() {
         return this.minlength != null && this.maxlength != null;
+    }
+};
+
+function DummyDateLimits($element) {
+    this.min = null;
+    this.max = null;
+
+    this.toDateOrNull = function(value) {
+        return value == null ? null : new Date(value);
+    }
+
+    if(typeof $element !== 'undefined'){
+        this.min = this.toDateOrNull($element.attr('min'));
+        this.max = this.toDateOrNull($element.attr('max'));
+
+        DummyLogger.log($element, 'original limits', this);
+    }
+
+    this.isMinMaxGiven = function() {
+        return this.min != null && this.max != null;
     }
 };
