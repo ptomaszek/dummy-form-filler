@@ -1,6 +1,4 @@
-var DummyFormFiller = {};
-
-DummyFormFiller = (function() {
+var DummyFormFiller = function() {
 	var engine = {};
     var _augur;
 
@@ -114,11 +112,11 @@ DummyFormFiller = (function() {
 		case DummyPurposeEnum.PHONE_PURPOSE:
 		case DummyPurposeEnum.AGE_PURPOSE:
 		case DummyPurposeEnum.YEAR_PURPOSE:
-			populateWithRandomNumberWisely($input, inputPurpose);
+			populateWithRandomNumberWisely($input, DummyPurposeEnum.YEAR_PURPOSE);
 			break;
 		case DummyPurposeEnum.UNDEFINED_PURPOSE:
 		default:
-			$input.val(getDummyText(getOrCreateMinlengthAndMaxlengthLimits(null, $input)));
+			$input.val(getDummyText(getOrCreateMinlengthAndMaxlengthLimits($input)));
 		}
 	}
 
@@ -153,37 +151,39 @@ DummyFormFiller = (function() {
 	function populateWithRandomDateWisely($input) {
 		var limits = getOrCreateMinAndMaxLimits(DummyPurposeEnum.YEAR_PURPOSE, $input);
 
-        var date = chance.date({
-            min: new Date(limits[MIN_LIMIT].toString()),
-            max: new Date(limits[MAX_LIMIT].toString())
-        });
+        var date = null;
 
-        $input.val(date.toISOString().split('T')[0]);
+        try {
+            date = chance.date({
+                min: new Date(limits.min.toString()),
+                max: new Date(limits.max.toString())
+            });
+            date = date.toISOString().split('T')[0];
+        }
+        catch(err) {
+           DummyLogger.log(err);
+        }
+
+        $input.val(date);
 	}
 
 	/*
 	 * ################ ### HELPERS #### ################
 	 */
 
-	/** Limit types */
-	var MINLENGTH_LIMIT = 'minlength_limit';
-	var MAXLENGTH_LIMIT = 'maxlength_limit';
-	var MIN_LIMIT = 'min_limit';
-	var MAX_LIMIT = 'max_limit';
-
 	/**
 	 * Checks if 'limits' contain min and max values. If yes, they are
 	 * returned. Otherwise new values are created for provided purpose.
 	 */
 	function getOrCreateMinAndMaxLimits(purpose, $input) {
-        var limits = readLimits($input);
-		if (MIN_LIMIT in limits && MAX_LIMIT in limits) {
+        var limits = new DummyLimits($input);
+
+		if (limits.min != null && limits.max != null) {
 			return limits;
 		}
 
 		var min = 1;
 		var max = 100;
-		var limitsToReturn = {};
 
 		if (DummyPurposeEnum.AGE_PURPOSE === purpose) {
 			min = 21;
@@ -193,70 +193,42 @@ DummyFormFiller = (function() {
 			max = 2015;
 		}
 
-		if (!(MIN_LIMIT in limits) && !(MAX_LIMIT in limits)) {
-			limitsToReturn[MIN_LIMIT] = min;
-			limitsToReturn[MAX_LIMIT] = max;
-			return limitsToReturn;
-		}
+        limits.min = Number(min);
+        limits.max = Number(max);
 
-		if (MIN_LIMIT in limits) {
-			limitsToReturn[MIN_LIMIT] = limits[MIN_LIMIT];
-		} else {
-			limitsToReturn[MIN_LIMIT] = min < limits[MAX_LIMIT] ? min : limits[MAX_LIMIT];
-		}
+        DummyLogger.log($input, 'created limits', limits);
 
-		if (MAX_LIMIT in limits) {
-			limitsToReturn[MAX_LIMIT] = limits[MAX_LIMIT];
-		} else {
-			limitsToReturn[MAX_LIMIT] = max > limits[MIN_LIMIT] ? max : limits[MIN_LIMIT];
-		}
-
-		return limitsToReturn;
+		return limits;
 	}
 	/**
      * Checks if 'limits' contain min and max values. If yes, they are
      * returned. Otherwise new values are created for provided purpose.
      */
-    function getOrCreateMinlengthAndMaxlengthLimits(purpose, $input) {
-        var limits = readLimits($input);
-        var limitsToReturn = {};
+    function getOrCreateMinlengthAndMaxlengthLimits($input) {
+        var limits = new DummyLimits($input);
+        console.log('#######################');
 
-        if (MINLENGTH_LIMIT in limits && MAXLENGTH_LIMIT in limits) {
-            if(limits[MINLENGTH_LIMIT] > limits[MAXLENGTH_LIMIT]){
-                limitsToReturn[MINLENGTH_LIMIT] = -1;
-                limitsToReturn[MAXLENGTH_LIMIT] = -1;
+		if (limits.minlength != null && limits.maxlength != null) {
+			return limits;
+		}
 
-                DummyLogger.log($input, 'read/created limits', limitsToReturn);
-                return limitsToReturn;
-            }
-
-            return limits;
+        if(limits.minlength == null){
+            limits.minlength = Number(chance.natural({
+                min : 1,
+                max : limits.maxlength
+                }));
         }
 
-        var min = 5;
-        var max = 10;
-
-        if (!(MINLENGTH_LIMIT in limits) && !(MAXLENGTH_LIMIT in limits)) {
-            limitsToReturn[MINLENGTH_LIMIT] = min;
-            limitsToReturn[MAXLENGTH_LIMIT] = max;
-            return limitsToReturn;
+        if(limits.maxlength == null){
+            limits.maxlength = Number(chance.natural({
+                min : limits.minlength,
+                max : limits.minlength + 5
+                }));
         }
 
-        if (MINLENGTH_LIMIT in limits) {
-            limitsToReturn[MINLENGTH_LIMIT] = limits[MINLENGTH_LIMIT];
-        } else {
-            limitsToReturn[MINLENGTH_LIMIT] = min < limits[MAXLENGTH_LIMIT] ? min : limits[MAXLENGTH_LIMIT];
-        }
+        DummyLogger.log($input, 'adjusted limits', limits);
 
-        if (MAXLENGTH_LIMIT in limits) {
-            limitsToReturn[MAXLENGTH_LIMIT] = limits[MAXLENGTH_LIMIT];
-        } else {
-            limitsToReturn[MAXLENGTH_LIMIT] = max > limits[MINLENGTH_LIMIT] ? max : limits[MINLENGTH_LIMIT];
-        }
-
-        DummyLogger.log($input, 'read/created limits', limitsToReturn);
-
-        return limitsToReturn;
+        return limits;
     }
 
 	function isEmptyVisibleAndEnabled($element) {
@@ -292,34 +264,6 @@ DummyFormFiller = (function() {
 		return anyInputChecked;
 	}
 
-	/**
-	 * Returns an array of limits, i.e.: - min/max length - min/max value
-	 */
-	function readLimits($element) {
-		var limits = {};
-		var minlength = $element.attr('minlength');
-		var maxlength = $element.attr('maxlength');
-		var min = $element.attr('min');
-		var max = $element.attr('max');
-
-		if (minlength) {
-			limits[MINLENGTH_LIMIT] = minlength;
-		}
-		if (maxlength) {
-			limits[MAXLENGTH_LIMIT] = maxlength;
-		}
-		if (min) {
-			limits[MIN_LIMIT] = min;
-		}
-		if (max) {
-			limits[MAX_LIMIT] = max;
-		}
-
-		DummyLogger.log($element, 'original limits', limits);
-
-		return limits;
-	}
-
 	function findInputsByTypeAndName($here, type, name) {
 		return $here.find('input[type=' + type + '][name="' + name + '"]');
 	}
@@ -347,43 +291,42 @@ DummyFormFiller = (function() {
 			});
 		}
 
-		var min = Number(limits[MIN_LIMIT]);
-		var max = Number(limits[MAX_LIMIT]);
+		var min = limits.min == null ? 0 : Number(limits.min);
+		var max = limits.max == null ? 500 : Number(limits.max);
 
-		if (min > max) {
-			return -1
-		}
-		return chance.natural({
-			min : min,
-			max : max
-		});
+        try {
+            return chance.natural({
+                min : min,
+                max : max
+            });
+        }
+        catch(err) {
+           DummyLogger.log(err);
+        }
 	}
 
 	/**
-	 * Returns random text of a length of 5 to 10 characters. First letter
-	 * uppercased.
+	 * Returns random text of a given length. First letter uppercased.
 	 */
 	function getDummyText(limits) {
-	    var text = '';
-		if (typeof limits === 'undefined') {
-            text = $.trim(chance.string({
-                length : chance.natural({
-                    min : 5,
-                    max : 10
-                }),
-                pool : DEI_KOBOL
-            }));
-		} else {
-		    text = $.trim(chance.string({
-                length : chance.natural({
-                    min :  parseFloat(limits[MINLENGTH_LIMIT]),
-                    max :  parseFloat(limits[MAXLENGTH_LIMIT])
-                }),
-                pool : DEI_KOBOL
-            }));
+        if (typeof limits === 'undefined') {
+            return;
         }
 
-		return chance.capitalize(text);
+        try {
+            var text = $.trim(chance.string({
+                length : chance.natural({
+                    min : limits.minlength,
+                    max : limits.maxlength
+                }),
+                pool : DEI_KOBOL
+            }));
+
+            return chance.capitalize(text);
+        }
+        catch(err) {
+           DummyLogger.log(err);
+        }
 	}
 
 	/**
@@ -396,4 +339,4 @@ DummyFormFiller = (function() {
 	}
 
 	return engine;
-}());
+}();
