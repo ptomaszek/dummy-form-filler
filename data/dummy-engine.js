@@ -1,23 +1,19 @@
 var DummyFormFiller = function() {
 	var engine = {};
+
     var _augur;
+    var _generator;
 
 	engine.populateDummyData = function() {
 		var $here = $('html');
         _augur = new DummyAugur();
+        _generator = new DummyGenerator();
 
 		$.each($here.find('input, select, textarea'), function() {
 			populateElementIfNotSetYet($(this), $here);
 		});
 	}
 
-	var DEI_KOBOL = 'Dei Kobol una apita uthoukarana ' + 'Ukthea mavatha gaman kerimuta '
-			+ 'Obe satharane mua osavathamanabanta ' + 'Api obata yagnya karama'
-			+ 'ph\'nglui mglw\'nafh Cthulhu R\'lyeh wgah\'nagl fhtagn';
-
-	var LETTERS = "abcdefghijklmnopqrstuvwxyz";
-
-	var dummyEmail = chance.email();
 	var excludedNames = [];
 
 	/**
@@ -32,9 +28,9 @@ var DummyFormFiller = function() {
 				populateWithRandomTextWisely($element);
 		}
 		else if ($element.is('[type=email]') && isEmptyVisibleAndEnabled($element)) {
-				$element.val(dummyEmail);
+				$element.val(_generator.getDummyEmail());
 		} else if ($element.is('[type=url]') && isEmptyVisibleAndEnabled($element)) {
-				$element.val('http://' + chance.domain());
+				$element.val('http://' + _generator.getDummyDomain());
 		} else if ($element.is('[type=radio]')) {
 			var groupName = $element.prop('name');
 			if (isEnabled($element) && !isExcluded(groupName)) {
@@ -62,7 +58,7 @@ var DummyFormFiller = function() {
 		} else if ($element.is('[type=date]') && isEmptyVisibleAndEnabled($element)) {
                 populateWithRandomDateWisely($element);
         } else if ($element.is('[type=tel]') && isEmptyVisibleAndEnabled($element)) {
-				$element.val(getDummyPhone());
+				$element.val(_generator.getDummyPhone());
 		} else if ($element.is('textarea') && isEmptyVisibleAndEnabled($element)) {
 				$element.val(chance.paragraph());
 		}
@@ -116,7 +112,7 @@ var DummyFormFiller = function() {
 			break;
 		case DummyPurposeEnum.UNDEFINED_PURPOSE:
 		default:
-			$input.val(getDummyText(getOrCreateMinlengthAndMaxlengthLimits($input)));
+			$input.val(_generator.getDummyText(getOrCreateMinlengthAndMaxlengthLimits($input)));
 		}
 	}
 
@@ -129,19 +125,19 @@ var DummyFormFiller = function() {
 
 		switch (inputPurpose) {
 		case DummyPurposeEnum.PHONE_PURPOSE:
-			$input.val(getDummyPhone());
+			$input.val(_generator.getDummyPhone());
 			break;
 		case DummyPurposeEnum.AGE_PURPOSE:
 			var ageLimits = getOrCreateMinAndMaxLimits(DummyPurposeEnum.AGE_PURPOSE, $input);
-			$input.val(getDummyNumber(ageLimits));
+			$input.val(_generator.getDummyNumber(ageLimits));
 			break;
 		case DummyPurposeEnum.YEAR_PURPOSE:
 			var yearLimits = getOrCreateMinAndMaxLimits(DummyPurposeEnum.YEAR_PURPOSE, $input);
-			$input.val(getDummyNumber(yearLimits));
+			$input.val(_generator.getDummyNumber(yearLimits));
 			break;
 		case DummyPurposeEnum.UNDEFINED_PURPOSE:
 		default:
-			$input.val(getDummyNumber(getOrCreateMinAndMaxLimits(null, $input)));
+			$input.val(_generator.getDummyNumber(getOrCreateMinAndMaxLimits(null, $input)));
 		}
 	}
 
@@ -151,20 +147,7 @@ var DummyFormFiller = function() {
 	function populateWithRandomDateWisely($input) {
 		var limits = getOrCreateMinAndMaxDateLimits($input);
 
-        var date = null;
-
-        try {
-            date = chance.date({
-                min: limits.min,
-                max: limits.max
-            });
-        }
-        catch(err) {
-           DummyLogger.log(err);
-           return;
-        }
-
-        $input.val(date.toISOString().split('T')[0]);
+        $input.val(_generator.getDummyDate(limits));
 	}
 
 	/*
@@ -301,68 +284,6 @@ var DummyFormFiller = function() {
 
 	function isExcluded(groupName) {
 		return $.inArray(groupName, excludedNames) !== -1;
-	}
-
-	/*
-	 * ################ ## GENERATORS ## ################
-	 */
-
-	/**
-	 * Returns random number that meets given limitations, i.e. min and max
-	 * values.
-	 */
-	function getDummyNumber(limits) {
-		if (typeof limits === 'undefined') {
-			return chance.natural({
-				max : 500
-			});
-		}
-
-		var min = limits.min == null ? 0 : Number(limits.min);
-		var max = limits.max == null ? 500 : Number(limits.max);
-
-        try {
-            return chance.natural({
-                min : min,
-                max : max
-            });
-        }
-        catch(err) {
-           DummyLogger.log(err);
-        }
-	}
-
-	/**
-	 * Returns random text of a given length. First letter uppercased.
-	 */
-	function getDummyText(limits) {
-        if (typeof limits === 'undefined') {
-            return;
-        }
-
-        try {
-            var text = $.trim(chance.string({
-                length : chance.natural({
-                    min : limits.minlength,
-                    max : limits.maxlength
-                }),
-                pool : DEI_KOBOL
-            }));
-
-            return chance.capitalize(text);
-        }
-        catch(err) {
-           DummyLogger.log(err);
-        }
-	}
-
-	/**
-	 * Returns random phone number.
-	 */
-	function getDummyPhone() {
-		return chance.phone({
-			formatted : false
-		});
 	}
 
 	return engine;
