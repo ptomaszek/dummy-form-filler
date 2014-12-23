@@ -14,7 +14,7 @@ function DummyLimits($element) {
         this.min = this.toNumberOrNull($element.attr('min'));
         this.max = this.toNumberOrNull($element.attr('max'));
 
-        DummyLogger.log($element, 'original limits', this);
+        DummyLogger.log($element, 'read limits', this);
     }
 };
 
@@ -30,6 +30,6 @@ function DummyDateLimits($element) {
         this.min = this.toDateOrNull($element.attr('min'));
         this.max = this.toDateOrNull($element.attr('max'));
 
-        DummyLogger.log($element, 'original limits', this);
+        DummyLogger.log($element, 'read limits', this);
     }
 };

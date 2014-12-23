@@ -170,7 +170,7 @@ var DummyFormFiller = function() {
             limits.max = new Date('2015');
          }
 
-        DummyLogger.log($input, 'filled out/created limits', limits);
+        DummyLogger.log($input, 'adjusted limits', limits);
 
 		return limits;
 	}
@@ -204,7 +204,7 @@ var DummyFormFiller = function() {
             }
          }
 
-        DummyLogger.log($input, 'filled out/created limits', limits);
+        DummyLogger.log($input, 'adjusted limits', limits);
 
 		return limits;
 	}
