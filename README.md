@@ -7,7 +7,7 @@ Useful for web developers and testers.**
 ####Features:
 - Lack of features
 - Works out of the box.
-- Perceives basic semantic hints (e.g. label with 'age', 'year', 'phone' strings) and limitations (e.g. min, minlength)
+- Perceives basic semantic hints (e.g. when a label contains 'age', 'year', 'phone' strings) and limitations (e.g. min, minlength)
 - Supported elements:
  - input: text, email, number, radio, checkbox, tel, password, date, url
  - select
