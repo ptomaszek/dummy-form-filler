@@ -1,4 +1,4 @@
-var DummyLogger = {};
+var DummyLogger = {}
 
 /**
  * Prints information next to the given element. Doesn't log if there's

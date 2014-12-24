@@ -7,30 +7,21 @@ var DummyGenerator = function() {
 
 	var DUMMY_EMAIL = chance.email();
 
-   /**
-   	 * Returns random number that meets given limitations, i.e. min and max
-   	 * values.
-   	 */
-   	this.getDummyNumber = function(limits) {
-   		if (typeof limits === 'undefined') {
-   			return chance.natural({
-   				max : 500
-   			});
-   		}
-
-   		var min = limits.min == null ? 0 : Number(limits.min);
-   		var max = limits.max == null ? 500 : Number(limits.max);
-
-           try {
-               return chance.natural({
-                   min : min,
-                   max : max
-               });
-           }
-           catch(err) {
-              DummyLogger.log(err);
-           }
-   	}
+    /**
+    * Returns random number that meets given limitations, i.e. min and max
+    * values.
+    */
+    this.getDummyNumber = function(limits) {
+        try {
+            return chance.natural({
+                min : limits.min,
+                max : limits.max
+            });
+        }
+        catch(err) {
+            DummyLogger.log(err);
+        }
+    }
 
    	/**
    	 * Returns random text of a given length. First letter uppercased.

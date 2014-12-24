@@ -94,148 +94,63 @@ var DummyFormFiller = function() {
 	}
 
 	/**
-	 * Populates given input with random text or readdresses the task to more
+	 * Populates given element with a random text or readdresses the task to more
 	 * appropriate populator. Considers:
 	 *   - min and max properties
 	 *   - name and label to guess input's role, e.g. age, year
 	 */
-	function populateWithRandomTextWisely($input) {
-		var inputPurpose = _augur.defineInputPurpose($input);
+	function populateWithRandomTextWisely($element) {
+		var purpose = _augur.defineInputPurpose($element);
 
-		switch (inputPurpose) {
+		switch (purpose) {
 		case DummyPurposeEnum.PHONE_PURPOSE:
 		case DummyPurposeEnum.AGE_PURPOSE:
 		case DummyPurposeEnum.YEAR_PURPOSE:
-			populateWithRandomNumberWisely($input, inputPurpose);
+			populateWithRandomNumberWisely($element, purpose);
 			break;
 		case DummyPurposeEnum.UNDEFINED_PURPOSE:
 		default:
-			$input.val(_generator.getDummyText(getOrCreateMinlengthAndMaxlengthLimits($input)));
+		    var limits = DummyLimitsUtils.readAndAdjustMinlengthMaxLengthLimits($element);
+			$element.val(_generator.getDummyText(limits));
 		}
 	}
 
 	/**
-	 * Populates given input with random number. Considers:
+	 * Populates given element with a random number. Considers:
      *   - min and max properties
      *   - name and label to guess input's role, e.g. age, year
 	 */
-	function populateWithRandomNumberWisely($input, inputPurpose) {
-		inputPurpose = (typeof inputPurpose !== 'undefined') ? inputPurpose : _augur.defineInputPurpose($input);
+	function populateWithRandomNumberWisely($element, purpose) {
+		purpose = (typeof purpose !== 'undefined') ? purpose : _augur.defineInputPurpose($element);
 
-		switch (inputPurpose) {
+		switch (purpose) {
 		case DummyPurposeEnum.PHONE_PURPOSE:
-			$input.val(_generator.getDummyPhone());
+			$element.val(_generator.getDummyPhone());
 			break;
 		case DummyPurposeEnum.AGE_PURPOSE:
-			var ageLimits = getOrCreateMinAndMaxLimits(DummyPurposeEnum.AGE_PURPOSE, $input);
-			$input.val(_generator.getDummyNumber(ageLimits));
+			var ageLimits = DummyLimitsUtils.readAndAdjustMinMaxLimits(DummyPurposeEnum.AGE_PURPOSE, $element);
+			$element.val(_generator.getDummyNumber(ageLimits));
 			break;
 		case DummyPurposeEnum.YEAR_PURPOSE:
-			var yearLimits = getOrCreateMinAndMaxLimits(DummyPurposeEnum.YEAR_PURPOSE, $input);
-			$input.val(_generator.getDummyNumber(yearLimits));
+			var yearLimits = DummyLimitsUtils.readAndAdjustMinMaxLimits(DummyPurposeEnum.YEAR_PURPOSE, $element);
+			$element.val(_generator.getDummyNumber(yearLimits));
 			break;
 		case DummyPurposeEnum.UNDEFINED_PURPOSE:
 		default:
-			$input.val(_generator.getDummyNumber(getOrCreateMinAndMaxLimits(null, $input)));
+		    var limits = DummyLimitsUtils.readAndAdjustMinMaxLimits(null, $element);
+			$element.val(_generator.getDummyNumber(limits));
 		}
 	}
 
 	/**
-	 * Populates given input with random date. Considers:
+	 * Populates given element with a random date. Considers:
 	 *   - min and max properties
 	 */
-	function populateWithRandomDateWisely($input) {
-		var limits = getOrCreateMinAndMaxDateLimits($input);
+	function populateWithRandomDateWisely($element) {
+		var limits = DummyLimitsUtils.readAndAdjustDateLimits($element);
 
-        $input.val(_generator.getDummyDate(limits));
+        $element.val(_generator.getDummyDate(limits));
 	}
-
-	function getOrCreateMinAndMaxDateLimits($input) {
-        var limits = new DummyDateLimits($input);
-
-		if (limits.min != null && limits.max != null) {
-			return limits;
-		} else if (limits.min == null && limits.max != null){
-             limits.min = new Date(chance.date({
-                 min : new Date(new Date(limits.max).setFullYear(limits.max.getFullYear() - 10)),
-                 max : limits.max
-             }));
-         } else if (limits.max == null && limits.min != null){
-             limits.max = new Date(chance.date({
-                 min : limits.min,
-                 max : new Date(new Date(limits.min).setFullYear(limits.min.getFullYear() + 10))
-             }));
-         } else {
-            limits.min = new Date('1940');
-            limits.max = new Date('2015');
-         }
-
-        DummyLogger.log($input, 'adjusted limits', limits);
-
-		return limits;
-	}
-
-	/**
-	 * Checks if 'limits' contain min and max values. If yes, they are
-	 * returned. Otherwise new values are created for provided purpose.
-	 */
-	function getOrCreateMinAndMaxLimits(purpose, $input) {
-        var limits = new DummyLimits($input);
-
-		if (limits.min != null && limits.max != null) {
-			return limits;
-		} else if (limits.min == null && limits.max != null){
-             limits.min = new Number(chance.natural({
-                 min : 1,
-                 max : limits.maxlength
-                 }));
-         } else if (limits.max == null && limits.min != null){
-             limits.max = new Number(chance.natural({
-                 min : limits.minlength,
-                 max : limits.minlength + 5
-                 }));
-         } else {
-            if (DummyPurposeEnum.AGE_PURPOSE === purpose) {
-                limits.min = new Number(21);
-                limits.max = new Number(75);
-            } else if (DummyPurposeEnum.YEAR_PURPOSE === purpose) {
-                limits.min = new Number(1940);
-                limits.max = new Number(2015);
-            }
-         }
-
-        DummyLogger.log($input, 'adjusted limits', limits);
-
-		return limits;
-	}
-	/**
-     * Checks if 'limits' contain min and max values. If yes, they are
-     * returned. Otherwise new values are created for provided purpose.
-     */
-    function getOrCreateMinlengthAndMaxlengthLimits($input) {
-        var limits = new DummyLimits($input);
-
-		if (limits.minlength != null && limits.maxlength != null) {
-			return limits;
-		} else if (limits.minlength == null && limits.maxlength != null){
-            limits.minlength = new Number(chance.natural({
-                min : 1,
-                max : limits.maxlength
-                }));
-        } else if (limits.maxlength == null && limits.minlength != null){
-            limits.maxlength = new Number(chance.natural({
-                min : limits.minlength,
-                max : limits.minlength + 5
-                }));
-        } else {
-		    limits.minlength = 1;
-		    limits.maxlength = 15;
-        }
-
-        DummyLogger.log($input, 'adjusted limits', limits);
-
-        return limits;
-    }
 
 	function isEmptyVisibleAndEnabled($element) {
 		return isEmpty($element) && isVisible($element) && isEnabled($element);
@@ -257,10 +172,10 @@ var DummyFormFiller = function() {
 		return $element.is(":enabled");
 	}
 
-	function isAnyInputChecked($inputs) {
+	function isAnyInputChecked($elements) {
 		var anyInputChecked = false;
 
-		$inputs.each(function() {
+		$elements.each(function() {
 			if ($(this).is(':checked')) {
 				anyInputChecked = true;
 				return false; // breaks the loop only; does not return anything from the method
