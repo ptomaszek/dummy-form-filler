@@ -60,13 +60,21 @@
     <label for="minMaxInvalid">Number with invalid limits (130-120)</label>
     <input type="number" id='minMaxInvalid' min=130 max="120">
     <br>
-    Select single:
+    Select single (disabled option should never be chosen):
     <select>
         <option disabled selected> -- select an option --</option>
         <option value="volvo">Volvo</option>
         <option value="saab">Saab</option>
         <option value="opel">Opel</option>
         <option value="audi">Audi</option>
+    </select>
+    <br>
+    Select single 2 (empty option should never be chosen):
+    <select>
+        <option value="0"></option>
+        <option value="1">Foo</option>
+        <option value="2">Bar</option>
+        <option value="3">Baz</option>
     </select>
     <br>
     Select multiple:
@@ -79,6 +87,14 @@
     <br>
     Already selected:
     <select multiple>
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option selected value="opel">Opel</option>
+        <option value="audi">Audi</option>
+    </select>
+    <br>
+    Already selected 2:
+    <select>
         <option value="volvo">Volvo</option>
         <option value="saab">Saab</option>
         <option selected value="opel">Opel</option>

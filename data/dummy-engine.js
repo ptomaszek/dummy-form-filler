@@ -25,8 +25,7 @@ var DummyFormFiller = function() {
 	function populateElementIfNotSetYet($element, $topParent) {
 		if ($element.is('[type=text]') && isEmptyVisibleAndEnabled($element)) {
 				populateWithRandomTextWisely($element);
-		}
-		else if ($element.is('[type=email]') && isEmptyVisibleAndEnabled($element)) {
+		} else if ($element.is('[type=email]') && isEmptyVisibleAndEnabled($element)) {
 				$element.val(_generator.getDummyEmail());
 		} else if ($element.is('[type=url]') && isEmptyVisibleAndEnabled($element)) {
 				$element.val('http://' + _generator.getDummyDomain());
@@ -50,7 +49,7 @@ var DummyFormFiller = function() {
 			}
 		} else if ($element.is('[type=password]') && isEmptyVisibleAndEnabled($element)) {
 			$element.val("0Pa$$4uM^t3");
-		} else if ($element.is('select') && isEmptyVisibleAndEnabled($element)) {
+		} else if ($element.is('select') && isSelectVisibleEnabledAndUnselected($element)) {
 				clickRandomOptionOrOptions($element);
 		} else if ($element.is('[type=number]') && isEmptyVisibleAndEnabled($element)) {
 				populateWithRandomNumberWisely($element);
@@ -78,7 +77,7 @@ var DummyFormFiller = function() {
 
 	/**
 	 * Selects one option or, if 'multiple', random number of options. Does not
-	 * select single option if currently selected index higher than 0. Does not
+	 * select single option if currently selected is rightfully selected. Does not
 	 * select multiple options if any already selected.
 	 */
 	function clickRandomOptionOrOptions($select) {
@@ -87,10 +86,24 @@ var DummyFormFiller = function() {
                 $(this).prop("selected", chance.bool());
             });
 		} else {
-			if ($select.prop("selectedIndex") <= 0) {
+		    var $selectedOption = $select.find(":selected");
+
+			if ($selectedOption && !isOptionSelectableRightfully($selectedOption)) {
+			    $(chance.pick($select.find('option').not($selectedOption))).prop("selected", true);
+			} else {
 				$(chance.pick($select.find('option'))).prop("selected", true);
 			}
 		}
+	}
+
+	/**
+	 * Checks whether the option is a good, selectable option, i.e. is not a 'starting option' (that should never be selected).
+	 * So the option is:
+	 * - enabled
+	 * - not empty
+	 */
+	function isOptionSelectableRightfully($option) {
+	    return isEnabled($option) && $.trim($option.text());
 	}
 
 	/**
@@ -156,8 +169,17 @@ var DummyFormFiller = function() {
 		return isEmpty($element) && isVisible($element) && isEnabled($element);
 	}
 
-	function isEmptyVisibleAndEnabled($element) {
-		return isEmpty($element) && isVisible($element) && isEnabled($element);
+	function isSelectVisibleEnabledAndUnselected($select) {
+	    var isSelectedRightfully = false;
+
+	    $select.find(":selected").each(function() {
+             if(isOptionSelectableRightfully($(this))){
+                isSelectedRightfully = true;
+				return false; // breaks the loop only; does not return anything from the method
+             }
+        });
+
+        return isVisible($select) && isEnabled($select) && !isSelectedRightfully;
 	}
 
 	function isEmpty($element) {
