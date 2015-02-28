@@ -8,6 +8,10 @@ var DummyFormFiller = function() {
         _augur = new DummyAugur();
         _generator = new DummyGenerator();
 
+        $here.find('form').each(function(){
+            $(this)[0].reset();
+        });
+
 		$.each($here.find('input, select, textarea'), function() {
 			populateElementIfNotSetYet($(this), $here);
 		});
