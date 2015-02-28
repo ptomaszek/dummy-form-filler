@@ -86,24 +86,30 @@ var DummyFormFiller = function() {
                 $(this).prop("selected", chance.bool());
             });
 		} else {
-		    var $selectedOption = $select.find(":selected");
+		    var rightfulOptions = getRightfulOptions($select);
 
-			if ($selectedOption && !isOptionSelectableRightfully($selectedOption)) {
-			    $(chance.pick($select.find('option').not($selectedOption))).prop("selected", true);
-			} else {
-				$(chance.pick($select.find('option'))).prop("selected", true);
+            if(rightfulOptions.length > 0){
+			    $(chance.pick(rightfulOptions)).prop("selected", true);
 			}
 		}
 	}
 
 	/**
-	 * Checks whether the option is a good, selectable option, i.e. is not a 'starting option' (that should never be selected).
-	 * So the option is:
+	 * Returns options that are considered rightfully selectable. Excludes 'starting options' (that should never be selected).
+	 * Selectable options are:
 	 * - enabled
 	 * - not empty
 	 */
-	function isOptionSelectableRightfully($option) {
-	    return isEnabled($option) && $.trim($option.text());
+	function getRightfulOptions($select) {
+	    var rightfulOptions = [];
+
+	    $select.find('option').each(function() {
+	        if(isEnabled($(this)) && $.trim($(this).text())){
+	            rightfulOptions.push($(this));
+	        }
+	    });
+
+	    return rightfulOptions;
 	}
 
 	/**
@@ -170,16 +176,19 @@ var DummyFormFiller = function() {
 	}
 
 	function isSelectVisibleEnabledAndUnselected($select) {
-	    var isSelectedRightfully = false;
+        return isVisible($select) && isEnabled($select) && !isAnyRightfulOptionSelected($select);
+	}
 
-	    $select.find(":selected").each(function() {
-             if(isOptionSelectableRightfully($(this))){
-                isSelectedRightfully = true;
-				return false; // breaks the loop only; does not return anything from the method
-             }
-        });
+	function isAnyRightfulOptionSelected($select) {
+        var rightfulOptions = getRightfulOptions($select);
 
-        return isVisible($select) && isEnabled($select) && !isSelectedRightfully;
+        for (var i = 0; i < rightfulOptions.length; ++i) {
+            if ($(rightfulOptions[i]).prop('selected')) {
+                return true;
+            }
+        }
+
+        return false;
 	}
 
 	function isEmpty($element) {
