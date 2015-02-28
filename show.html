@@ -60,13 +60,28 @@
     <label for="minMaxInvalid">Number with invalid limits (130-120)</label>
     <input type="number" id='minMaxInvalid' min=130 max="120">
     <br>
-    Select single:
-    <select>
+    Select single (disabled - do nothing):
+    <select disabled>
+        <option value="saab">Saab</option>
         <option disabled selected> -- select an option --</option>
+        <option value="audi">Audi</option>
+    </select>
+    <br>
+    Select single (disabled option should never be chosen):
+    <select >
         <option value="volvo">Volvo</option>
+        <option disabled selected> -- select an option --</option>
         <option value="saab">Saab</option>
         <option value="opel">Opel</option>
         <option value="audi">Audi</option>
+    </select>
+    <br>
+    Select single 2 (empty option should never be chosen):
+    <select>
+        <option value="0"></option>
+        <option value="1">Foo</option>
+        <option value="2">Bar</option>
+        <option value="3">Baz</option>
     </select>
     <br>
     Select multiple:
@@ -79,6 +94,14 @@
     <br>
     Already selected:
     <select multiple>
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option selected value="opel">Opel</option>
+        <option value="audi">Audi</option>
+    </select>
+    <br>
+    Already selected 2:
+    <select>
         <option value="volvo">Volvo</option>
         <option value="saab">Saab</option>
         <option selected value="opel">Opel</option>
@@ -98,7 +121,7 @@
     <input type="date" min="2030" max="2030-03-16">
     <br>
     Date with min limit (2030):
-    <input type="date" min="2030">
+    <!--<input type="date" min="2030">-->
     <br>
     Date with max limit (1792):
     <input type="date" max="1792">

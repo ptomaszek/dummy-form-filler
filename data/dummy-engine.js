@@ -8,6 +8,10 @@ var DummyFormFiller = function() {
         _augur = new DummyAugur();
         _generator = new DummyGenerator();
 
+        $here.find('form').each(function(){
+            $(this)[0].reset();
+        });
+
 		$.each($here.find('input, select, textarea'), function() {
 			populateElementIfNotSetYet($(this), $here);
 		});
@@ -25,8 +29,7 @@ var DummyFormFiller = function() {
 	function populateElementIfNotSetYet($element, $topParent) {
 		if ($element.is('[type=text]') && isEmptyVisibleAndEnabled($element)) {
 				populateWithRandomTextWisely($element);
-		}
-		else if ($element.is('[type=email]') && isEmptyVisibleAndEnabled($element)) {
+		} else if ($element.is('[type=email]') && isEmptyVisibleAndEnabled($element)) {
 				$element.val(_generator.getDummyEmail());
 		} else if ($element.is('[type=url]') && isEmptyVisibleAndEnabled($element)) {
 				$element.val('http://' + _generator.getDummyDomain());
@@ -50,7 +53,7 @@ var DummyFormFiller = function() {
 			}
 		} else if ($element.is('[type=password]') && isEmptyVisibleAndEnabled($element)) {
 			$element.val("0Pa$$4uM^t3");
-		} else if ($element.is('select') && isEmptyVisibleAndEnabled($element)) {
+		} else if ($element.is('select') && isSelectVisibleEnabledAndUnselected($element)) {
 				clickRandomOptionOrOptions($element);
 		} else if ($element.is('[type=number]') && isEmptyVisibleAndEnabled($element)) {
 				populateWithRandomNumberWisely($element);
@@ -78,7 +81,7 @@ var DummyFormFiller = function() {
 
 	/**
 	 * Selects one option or, if 'multiple', random number of options. Does not
-	 * select single option if currently selected index higher than 0. Does not
+	 * select single option if currently selected is rightfully selected. Does not
 	 * select multiple options if any already selected.
 	 */
 	function clickRandomOptionOrOptions($select) {
@@ -87,10 +90,30 @@ var DummyFormFiller = function() {
                 $(this).prop("selected", chance.bool());
             });
 		} else {
-			if ($select.prop("selectedIndex") <= 0) {
-				$(chance.pick($select.find('option'))).prop("selected", true);
+		    var rightfulOptions = getRightfulOptions($select);
+
+            if(rightfulOptions.length > 0){
+			    $(chance.pick(rightfulOptions)).prop("selected", true);
 			}
 		}
+	}
+
+	/**
+	 * Returns options that are considered rightfully selectable. Excludes 'starting options' (that should never be selected).
+	 * Selectable options are:
+	 * - enabled
+	 * - not empty
+	 */
+	function getRightfulOptions($select) {
+	    var rightfulOptions = [];
+
+	    $select.find('option').each(function() {
+	        if(isEnabled($(this)) && $.trim($(this).text())){
+	            rightfulOptions.push($(this));
+	        }
+	    });
+
+	    return rightfulOptions;
 	}
 
 	/**
@@ -156,8 +179,20 @@ var DummyFormFiller = function() {
 		return isEmpty($element) && isVisible($element) && isEnabled($element);
 	}
 
-	function isEmptyVisibleAndEnabled($element) {
-		return isEmpty($element) && isVisible($element) && isEnabled($element);
+	function isSelectVisibleEnabledAndUnselected($select) {
+        return isVisible($select) && isEnabled($select) && !isAnyRightfulOptionSelected($select);
+	}
+
+	function isAnyRightfulOptionSelected($select) {
+        var rightfulOptions = getRightfulOptions($select);
+
+        for (var i = 0; i < rightfulOptions.length; ++i) {
+            if ($(rightfulOptions[i]).prop('selected')) {
+                return true;
+            }
+        }
+
+        return false;
 	}
 
 	function isEmpty($element) {
