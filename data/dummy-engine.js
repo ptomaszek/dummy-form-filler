@@ -106,9 +106,11 @@ var DummyFormFiller = function() {
 	 */
 	function getRightfulOptions($select) {
 	    var rightfulOptions = [];
+        var notRightfulTextsForSelect = ['select', 'choose', 'pick',' wybierz'];
 
 	    $select.find('option').each(function() {
-	        if(isEnabled($(this)) && $.trim($(this).text())){
+            var selectText = $(this).text();
+	        if(isEnabled($(this)) && $.trim(selectText) && !_augur.containsTexts(selectText, notRightfulTextsForSelect)){
 	            rightfulOptions.push($(this));
 	        }
 	    });
@@ -131,6 +133,9 @@ var DummyFormFiller = function() {
 		case DummyPurposeEnum.YEAR_PURPOSE:
 			populateWithRandomNumberWisely($element, purpose);
 			break;
+        case DummyPurposeEnum.EMAIL_PURPOSE:
+            $element.val(_generator.getDummyEmail());
+            break;
 		case DummyPurposeEnum.UNDEFINED_PURPOSE:
 		default:
 		    var limits = DummyLimitsUtils.readAndAdjustMinlengthMaxLengthLimits($element);
@@ -218,10 +223,6 @@ var DummyFormFiller = function() {
 		});
 
 		return anyInputChecked;
-	}
-
-	function findInputsByTypeAndName($here, type, name) {
-		return $here.find('input[type=' + type + '][name="' + name + '"]');
 	}
 
 	function findVisibleEnabledInputsByTypeAndName($here, type, name) {

@@ -15,8 +15,13 @@
     Text input (min 10 characters):
     <input id="text32" type="text" minlength="10">
     <br>
-    Email:
+    Email input:
     <input id="email" type="email">
+    <br>
+    <label for="emailTextInput">Email 2 (text input with 'email' label):</label>
+    <input id="emailTextInput" type="text">
+    <br>
+    Just 'e-mail' string before the text input<input type="text">
     <br>
     Already had value
     <input id="text5" type="text" value="So leave me alone!">
@@ -35,8 +40,8 @@
     Her tel no.:
     <input type="tel" id='tel' value="">
     <br>
-    <label for="phone">Your phone no.:</label>
-    <input type="text" id='phone' value="">
+    Your phone no.:
+    <input type="text" value="">
     <br>
     <label for="age">His age, or her:</label>
     <input type="text" id='age' value="">
@@ -105,6 +110,14 @@
         <option value="volvo">Volvo</option>
         <option value="saab">Saab</option>
         <option selected value="opel">Opel</option>
+        <option value="audi">Audi</option>
+    </select>
+    <br>
+    Already selected but contains strings like 'select, choose, pick' so is considered to be unselected yet:
+    <select>
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option selected value="opel">Please choose</option>
         <option value="audi">Audi</option>
     </select>
     <br>

@@ -1,11 +1,12 @@
 var DummyPurposeEnum = {
     /** Input purposes */
-    UNDEFINED_PURPOSE: 'undefined_purpose',
     PHONE_PURPOSE: 'phone_purpose',
     AGE_PURPOSE: 'age_purpose',
     YEAR_PURPOSE: 'year_purpose',
     NAME_PURPOSE: 'name_purpose',
-    POSTCODE_PURPOSE: 'postcode_purpose'
+    POSTCODE_PURPOSE: 'postcode_purpose',
+    EMAIL_PURPOSE: 'email_purpose',
+    UNDEFINED_PURPOSE: 'undefined_purpose'
 };
 
 var DummyAugur = function() {
@@ -15,7 +16,7 @@ var DummyAugur = function() {
      * role, e.g. age, year
      */
     this.defineInputPurpose = function($input) {
-        var purposeByLabel = this.defineInputPurposeByLabel($input);
+        var purposeByLabel = this.defineInputPurpose($input);
 
         if (typeof purposeByLabel !== DummyPurposeEnum.UNDEFINED_PURPOSE) {
             DummyLogger.log($input, 'purpose', purposeByLabel);
@@ -23,32 +24,75 @@ var DummyAugur = function() {
         }
 
         return DummyPurposeEnum.UNDEFINED_PURPOSE;
-    }
+    };
 
     /**
      * Considers label text: - phone - age - year
      */
-    this.defineInputPurposeByLabel = function($input) {
-        var labelText = '';
+    this.defineInputPurpose = function($input) {
+        var stringRelatedToTheInput = this.getStringRelatedToTheInput($input);
+        DummyLogger.log($input, 'string related to the input', stringRelatedToTheInput);
 
-        if ($input.prop('id')) {
-            labelText = $('label[for="' + $input.prop('id') + '"]').text();
-        }
-
-        if (this.containsText('phone', labelText)) {
+        if (this.containsText(stringRelatedToTheInput, 'phone')) {
             return DummyPurposeEnum.PHONE_PURPOSE;
-        } else if (this.containsText('age', labelText)) {
+        } else if (this.containsText(stringRelatedToTheInput, 'age')) {
             return DummyPurposeEnum.AGE_PURPOSE;
-        } else if (this.containsText('year', labelText)) {
+        } else if (this.containsText(stringRelatedToTheInput, 'year')) {
             return DummyPurposeEnum.YEAR_PURPOSE;
+        } else if (this.containsTexts(stringRelatedToTheInput, ['email', 'e-mail'])) {
+            return DummyPurposeEnum.EMAIL_PURPOSE;
         }
 
         return DummyPurposeEnum.UNDEFINED_PURPOSE;
-    }
+    };
 
-    this.containsText = function(searchFor, inString) {
-        return inString.toLowerCase().indexOf(searchFor) >= 0;
-    }
+    /**
+     * Returns the first found string describing the input. Strings representation importance:
+     *  - label
+     *  - 'free' text before the input
+     *  - id value
+     *  - empty string ''
+     * @param $input
+     * @returns {*}
+     */
+    this.getStringRelatedToTheInput = function($input) {
+        if ($input.prop('id')) {
+            var label = $('label[for="' + $input.prop('id') + '"]').text();
+
+            if(this.isNotEmpty(label)){
+                return label;
+            }
+
+        }
+
+        var textBeforeInput = $input[0].previousSibling.nodeValue;
+        if(this.isNotEmpty(textBeforeInput)){
+            return textBeforeInput;
+        }
+
+        if ($input.prop('id')) {
+            return $input.attr('id');
+        }
+        return '';
+    };
+
+    this.isNotEmpty = function(text) {
+        return $.trim(text);
+    };
+
+    this.containsText = function(inString, text) {
+        return inString.toLowerCase().indexOf(text.toLowerCase()) >= 0;
+    };
+
+    this.containsTexts = function(inString, texts) {
+        for (var i = 0; i < texts.length; ++i) {
+            if (this.containsText(inString, texts[i])) {
+                return true;
+            }
+        }
+
+        return false;
+    };
 
     return this;
 };

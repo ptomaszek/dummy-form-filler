@@ -13,7 +13,11 @@ Useful for web developers and testers.**
  - input: text, email, number, radio, checkbox, tel, password, date, url
  - select
  - textarea
- 
+
+Please note the logic of populating forms may not suite everyone, e.g. data that is already filled (existed before the page was loaded) will not be cleared and fitted with dummy data. If you think some behavior is terribly illogical, please give me a shout on github.
+
+Thank you for your time spent on raising bugs, writing patches and reviews, and for using the add-on.
+
 ####Installation:
 Download **bin/dummy-form-filler.xpi** file and drag it over a Firefox window. Some OCPD-touchy icon should appear on the Toolbar.
  
