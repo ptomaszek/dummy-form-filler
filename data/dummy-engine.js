@@ -131,6 +131,9 @@ var DummyFormFiller = function() {
 		case DummyPurposeEnum.YEAR_PURPOSE:
 			populateWithRandomNumberWisely($element, purpose);
 			break;
+        case DummyPurposeEnum.EMAIL_PURPOSE:
+            $element.val(_generator.getDummyEmail());
+            break;
 		case DummyPurposeEnum.UNDEFINED_PURPOSE:
 		default:
 		    var limits = DummyLimitsUtils.readAndAdjustMinlengthMaxLengthLimits($element);
@@ -218,10 +221,6 @@ var DummyFormFiller = function() {
 		});
 
 		return anyInputChecked;
-	}
-
-	function findInputsByTypeAndName($here, type, name) {
-		return $here.find('input[type=' + type + '][name="' + name + '"]');
 	}
 
 	function findVisibleEnabledInputsByTypeAndName($here, type, name) {
