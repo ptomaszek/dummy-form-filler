@@ -33,13 +33,13 @@ var DummyAugur = function() {
         var stringRelatedToTheInput = this.getStringRelatedToTheInput($input);
         DummyLogger.log($input, 'string related to the input', stringRelatedToTheInput);
 
-        if (this.containsText('phone', stringRelatedToTheInput)) {
+        if (this.containsText(stringRelatedToTheInput, 'phone')) {
             return DummyPurposeEnum.PHONE_PURPOSE;
-        } else if (this.containsText('age', stringRelatedToTheInput)) {
+        } else if (this.containsText(stringRelatedToTheInput, 'age')) {
             return DummyPurposeEnum.AGE_PURPOSE;
-        } else if (this.containsText('year', stringRelatedToTheInput)) {
+        } else if (this.containsText(stringRelatedToTheInput, 'year')) {
             return DummyPurposeEnum.YEAR_PURPOSE;
-        } else if (this.containsTexts(['email', 'e-mail'], stringRelatedToTheInput)) {
+        } else if (this.containsTexts(stringRelatedToTheInput, ['email', 'e-mail'])) {
             return DummyPurposeEnum.EMAIL_PURPOSE;
         }
 
@@ -80,13 +80,13 @@ var DummyAugur = function() {
         return $.trim(text);
     };
 
-    this.containsText = function(text, inString) {
+    this.containsText = function(inString, text) {
         return inString.toLowerCase().indexOf(text.toLowerCase()) >= 0;
     };
 
-    this.containsTexts = function(texts, inString) {
+    this.containsTexts = function(inString, texts) {
         for (var i = 0; i < texts.length; ++i) {
-            if (this.containsText(texts[i], inString)) {
+            if (this.containsText(inString, texts[i])) {
                 return true;
             }
         }

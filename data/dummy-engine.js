@@ -106,9 +106,11 @@ var DummyFormFiller = function() {
 	 */
 	function getRightfulOptions($select) {
 	    var rightfulOptions = [];
+        var notRightfulTextsForSelect = ['select', 'choose', 'pick',' wybierz'];
 
 	    $select.find('option').each(function() {
-	        if(isEnabled($(this)) && $.trim($(this).text())){
+            var selectText = $(this).text();
+	        if(isEnabled($(this)) && $.trim(selectText) && !_augur.containsTexts(selectText, notRightfulTextsForSelect)){
 	            rightfulOptions.push($(this));
 	        }
 	    });
