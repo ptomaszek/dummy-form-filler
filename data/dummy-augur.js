@@ -62,7 +62,6 @@ var DummyAugur = function() {
             if(this.isNotEmpty(label)){
                 return label;
             }
-
         }
 
         var textBeforeInput = $input[0].previousSibling.nodeValue;

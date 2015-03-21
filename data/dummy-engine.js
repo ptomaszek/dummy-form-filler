@@ -52,7 +52,7 @@ var DummyFormFiller = function() {
 				excludedNames.push(groupName);
 			}
 		} else if ($element.is('[type=password]') && isEmptyVisibleAndEnabled($element)) {
-			$element.val("0Pa$$4uM^t3");
+			$element.val(_generator.getDummyPassword());
 		} else if ($element.is('select') && isSelectVisibleEnabledAndUnselected($element)) {
 				clickRandomOptionOrOptions($element);
 		} else if ($element.is('[type=number]') && isEmptyVisibleAndEnabled($element)) {
