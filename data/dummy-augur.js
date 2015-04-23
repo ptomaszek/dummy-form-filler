@@ -64,9 +64,13 @@ var DummyAugur = function() {
             }
         }
 
-        var textBeforeInput = $input[0].previousSibling.nodeValue;
-        if(this.isNotEmpty(textBeforeInput)){
-            return textBeforeInput;
+        var previousSibling = $input[0].previousSibling;
+
+        if(previousSibling !== null) {
+            var textBeforeInput = previousSibling.nodeValue;
+            if (this.isNotEmpty(textBeforeInput)) {
+                return textBeforeInput;
+            }
         }
 
         if ($input.prop('id')) {
