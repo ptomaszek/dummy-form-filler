@@ -5,9 +5,9 @@
   "version": "1.0.0",
   "homepage_url": "https://github.com/ptomaszek/dummy-form-filler",
   "icons": {
-    "24": "icons/seahorse.svg",
-    "48": "icons/seahorse.svg",
-    "96": "icons/seahorse.svg"
+    "24": "icons/seahorse.png",
+    "48": "icons/seahorse.png",
+    "96": "icons/seahorse.png"
   },
 
   "permissions": [
@@ -16,9 +16,9 @@
 
   "browser_action": {
     "default_icon": {
-      "24": "icons/seahorse.svg",
-      "48": "icons/seahorse.svg",
-      "96": "icons/seahorse.svg"
+      "24": "icons/seahorse.png",
+      "48": "icons/seahorse.png",
+      "96": "icons/seahorse.png"
     },
     "default_title": "Dummy Form Filler"
   },
