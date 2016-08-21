@@ -27,13 +27,20 @@
     <input id="text5" type="text" value="So leave me alone!">
     <br>
     <input id="hiddenEmail" hidden="true" type="email" value="  ">
-    <br>
-    <input id="rad0" type="radio" name="sex" value="male">Male
-    <br>
-    <input id="rad1" type="radio" name="sex" value="female">Female
-    <br>
-    <input id="rad2" type="radio" name="oth" value="oth">Other radio group ('different name')
-    <br>
+    <fieldset>
+        <input id="rad0" type="radio" name="sex" value="male">Male
+        <input id="rad1" type="radio" name="sex" value="female">Female
+    </fieldset>
+    <fieldset>
+        <legend>One option only</legend>
+        <input id="rad2" type="radio" name="oth" value="oth"> Option
+    </fieldset>
+    <fieldset>
+        <legend>Value already set</legend>
+        <input id="rad3" type="radio" name="color" value="black">Black
+        <br>
+        <input id="rad4" checked type="radio" name="color" value="blue">Blue
+    </fieldset>
     <input id="ch7" type="checkbox" name="chkFamily" value="b1">Bum
     <input id="ch8" type="checkbox" name="chkFamily" value="b2">Bum2
     <br>
@@ -73,7 +80,7 @@
     </select>
     <br>
     Select single (disabled option should never be chosen):
-    <select >
+    <select>
         <option value="volvo">Volvo</option>
         <option disabled selected> -- select an option --</option>
         <option value="saab">Saab</option>

@@ -1,0 +1,45 @@
+{
+  "manifest_version": 2,
+  "name": "Dummy Form Filler",
+  "description": "One click to populate HTML forms with dummy data. Works out of the box.",
+  "version": "1.0.0",
+  "homepage_url": "https://github.com/ptomaszek/dummy-form-filler",
+  "icons": {
+    "24": "icons/seahorse.svg",
+    "48": "icons/seahorse.svg",
+    "96": "icons/seahorse.svg"
+  },
+
+  "permissions": [
+    "activeTab"
+  ],
+
+  "browser_action": {
+    "default_icon": {
+      "24": "icons/seahorse.svg",
+      "48": "icons/seahorse.svg",
+      "96": "icons/seahorse.svg"
+    },
+    "default_title": "Dummy Form Filler"
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "js/libs/jquery-2.1.0.min.js",
+        "js/libs/chance-0.7.0.min.js",
+        "js/dummy-logger.js",
+        "js/dummy-augur.js",
+        "js/dummy-limits.js",
+        "js/dummy-generator.js",
+        "js/dummy-engine.js"
+      ]
+    }
+  ]
+}
