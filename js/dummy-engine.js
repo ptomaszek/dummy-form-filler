@@ -53,7 +53,7 @@ var DummyFormFiller = function () {
                 excludedNames.push(groupName);
             }
         } else if ($element.is('[type=password]') && isEmptyVisibleAndEnabled($element)) {
-            $element.val(_generator.getDummyPassword());
+            _generator.withDummyPassword($element);
         } else if ($element.is('select') && isSelectVisibleEnabledAndUnselected($element)) {
             clickRandomOptionOrOptions($element);
         } else if ($element.is('[type=number]') && isEmptyVisibleAndEnabled($element)) {
@@ -216,7 +216,6 @@ var DummyFormFiller = function () {
     function isAnyInputChecked($elements) {
         var anyInputChecked = false;
         $elements.each(function () {
-            console.log($(this).is(':checked'));
             if ($(this).is(':checked')) {
                 anyInputChecked = true;
                 return false; // breaks the loop only; does not return anything from the method

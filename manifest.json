@@ -8,9 +8,14 @@
     "48": "icons/seahorse_48.png",
     "64": "icons/seahorse_64.png"
   },
+  "applications": {
+    "gecko": {
+      "id": "dummy-form-filler@example.com"
+    }
+  },
 
   "permissions": [
-    "activeTab"
+    "activeTab", "storage"
   ],
 
   "browser_action": {
@@ -39,5 +44,9 @@
         "js/dummy-engine.js"
       ]
     }
-  ]
+  ],
+
+  "options_ui": {
+    "page": "options.html"
+  }
 }
