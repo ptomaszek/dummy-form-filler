@@ -27,7 +27,7 @@
   },
   "background": {
     "scripts": [
-      "background.js"
+      "options_defaults.js", "background.js"
     ]
   },
 
@@ -35,6 +35,7 @@
     {
       "matches": ["<all_urls>"],
       "js": [
+        "options_defaults.js",
         "js/libs/jquery-2.1.0.min.js",
         "js/libs/chance-0.7.0.min.js",
         "js/dummy-logger.js",

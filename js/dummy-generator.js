@@ -63,9 +63,12 @@ var DummyGenerator = function () {
     };
 
     this.withDummyPassword = function ($element) {
-        chrome.storage.local.get('dummyPassword', function (options) {
-            console.log('inside: ' + options.dummyPassword);
-            $element.val(options.dummyPassword);
+        this.populateWith($element, DUMMY_PASSWORD_OPTION);
+    };
+
+    this.populateWith = function ($element, optionName) {
+        chrome.storage.local.get(optionName, function (options) {
+            $element.val(options[optionName]);
         });
     };
 

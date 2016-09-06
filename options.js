@@ -1,26 +1,22 @@
-var DEFAULTS = {
-    dummyPassword: '0Pa$$4uM^t3'
-};
-
-
 function saveOptions() {
-    chrome.storage.local.set({
-        dummyPassword: document.getElementById("dummyPassword").value
-    });
+    var options = {};
+    options[DUMMY_PASSWORD_OPTION] = document.getElementById(DUMMY_PASSWORD_OPTION).value;
+
+    chrome.storage.local.set(options);
 }
 
-function restoreOptions() {
+function loadOptions() {
     chrome.storage.local.get(
-        DEFAULTS
-        , function (savedOptions) {
-            document.getElementById("dummyPassword").value = savedOptions.dummyPassword;
+        CURRENT_OPTIONS
+        , function (options) {
+            document.getElementById(DUMMY_PASSWORD_OPTION).value = options[DUMMY_PASSWORD_OPTION];
         });
 }
 
 function resetOptions() {
-    chrome.storage.local.set(DEFAULTS);
+    chrome.storage.local.set(CURRENT_OPTIONS);
 }
 
-document.addEventListener('DOMContentLoaded', restoreOptions);
+document.addEventListener('DOMContentLoaded', loadOptions);
 document.getElementById('save').addEventListener('click', saveOptions);
 document.getElementById('reset').addEventListener('click', resetOptions);
