@@ -9,7 +9,6 @@ chrome.browserAction.onClicked.addListener(function () {
     )
 });
 
-
 runDummyRun = function () {
     chrome.tabs.executeScript({
         file: "js/main.js"
