@@ -1,6 +1,7 @@
 function saveOptions() {
     var options = {};
     options[DUMMY_PASSWORD_OPTION] = document.getElementById(DUMMY_PASSWORD_OPTION).value;
+    options[LOG_OPTION] = document.getElementById(LOG_OPTION).checked;
 
     chrome.storage.local.set(options);
 }
@@ -10,6 +11,7 @@ function loadOptions() {
         CURRENT_OPTIONS
         , function (options) {
             document.getElementById(DUMMY_PASSWORD_OPTION).value = options[DUMMY_PASSWORD_OPTION];
+            document.getElementById(LOG_OPTION).checked = options[LOG_OPTION];
         });
 }
 
