@@ -1,3 +1,4 @@
+// values are overridden by WebExtensions storage settings
 var CURRENT_OPTIONS = {};
 
 var DUMMY_PASSWORD_OPTION = 'dummyPasswordOption';

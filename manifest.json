@@ -27,7 +27,7 @@
   },
   "background": {
     "scripts": [
-      "options_defaults.js", "background.js"
+      "options/options_defaults.js", "background.js"
     ]
   },
 
@@ -35,9 +35,9 @@
     {
       "matches": ["<all_urls>"],
       "js": [
-        "options_defaults.js",
-        "js/libs/jquery-2.1.0.min.js",
-        "js/libs/chance-0.7.0.min.js",
+        "options/options_defaults.js",
+        "js/ext_libs/jquery-2.1.0.min.js",
+        "js/ext_libs/chance-0.7.0.min.js",
         "js/dummy-logger.js",
         "js/dummy-augur.js",
         "js/dummy-limits.js",
@@ -48,6 +48,6 @@
   ],
 
   "options_ui": {
-    "page": "options.html"
+    "page": "options/options.html"
   }
 }
