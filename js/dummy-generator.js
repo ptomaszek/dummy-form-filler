@@ -63,7 +63,7 @@ var DummyGenerator = function () {
     };
 
     this.withDummyPassword = function ($element) {
-        this.populateWith($element, DUMMY_PASSWORD_OPTION);
+        this.populateWith($element, CUSTOM_DUMMY_PASSWORD_KEY);
     };
 
     this.populateWith = function ($element, optionName) {

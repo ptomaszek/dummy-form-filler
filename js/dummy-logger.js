@@ -17,8 +17,8 @@ DummyLogger.log = function ($element, infoText, value) {
         }
     }
 
-    chrome.storage.local.get(LOG_OPTION, function(options){
-        if(options[LOG_OPTION]) {
+    chrome.storage.local.get(LOGGING_ENABLED_KEY, function(options){
+        if(options[LOGGING_ENABLED_KEY]) {
             logIt();
         }
     });
