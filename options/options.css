@@ -89,3 +89,7 @@
     background: #EA7B00;
     color: #fff;
 }
+
+.right {
+    float: right;
+}

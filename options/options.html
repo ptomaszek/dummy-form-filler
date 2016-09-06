@@ -11,7 +11,7 @@
     <div class="form-style-2-heading">Options</div>
     <form>
         <label for="dummyPasswordOption">
-            <span>Default password</span><input type="text" class="input-field" id="dummyPasswordOption"/>
+            <span>Default <i>password</i> value</span><input type="text" class="input-field" id="dummyPasswordOption"/>
         </label>
         <!--<label for="wiping"><span>Dummyzation mode</span>-->
         <!--<select id="wiping" class="select-field">-->
@@ -19,15 +19,14 @@
         <!--<option value="skipPopulated">Skip already populated</option>-->
         <!--</select>-->
         <!--</label>-->
+        <hr>
 
         <label for="logOption">
-            <span>Print debug info to <i>console.log()</i></span><input type="checkbox" id="logOption"/>
+            <span>Print debug info to <i>console</i></span><input type="checkbox" id="logOption"/>
         </label>
 
         <br><br>
-        <button id="save">Save</button>
-        <br><br>
-        <button id="reset">Reset to defaults</button>
+        <button id="save">Save</button><button id="reset" class="right">Reset to defaults</button>
     </form>
 </div>
 
