@@ -8,27 +8,24 @@
 
 <body>
 <div class="form-style-2">
-    <div class="form-style-2-heading">Options</div>
-    <form>
-        <label for="dummyPassword">
-            <span>Default <i>password</i> value</span><input type="text" class="input-field" id="dummyPassword"/>
-        </label>
-        <label for="wiping"><span>Before populating fields</span>
-            <select id="wiping" class="select-field">
-                <option value="wipeAll" title="that's brute, mate">wipe them all</option>
-                <option value="wipeChangedByDFFOnly" title="wipe only those fields that were changed by the plugin in the previous run">wipe those changed by the plugin</option>
-                <option value="skipPopulated" title="wipe none that are already filled and populate only empty fields">wipe none</option>
-            </select>
-        </label>
-        <br><hr>
-        <label for="log">
-            <span>Print debug info to <i>console</i></span><input type="checkbox" id="log"/>
-        </label>
+    <fieldset>
+        <legend class="form-style-2-heading">Options</legend>
 
-        <br><br>
-        <button id="save">Save</button>
-        <button id="reset" class="right">Reset to defaults</button>
-    </form>
+        <form>
+            <label for="dummyPassword">
+                <span>Default <i>password</i> value</span><input type="text" class="input-field" id="dummyPassword"/>
+            </label>
+            <br>
+            <hr>
+            <label for="log">
+                <span>Print debug info to <i>console</i></span><input type="checkbox" id="log"/>
+            </label>
+
+            <br><br>
+            <button id="save">Save</button>
+            <button id="reset" class="right">Reset to defaults</button>
+        </form>
+    </fieldset>
 </div>
 
 <script src="options_defaults.js"></script>

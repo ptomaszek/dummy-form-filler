@@ -6,9 +6,6 @@
 
 .form-style-2-heading {
     font-weight: bold;
-    font-style: italic;
-    border-bottom: 2px solid #ddd;
-    margin-bottom: 20px;
     font-size: 15px;
     padding-bottom: 3px;
 }
@@ -19,7 +16,7 @@
 }
 
 .form-style-2 label > span {
-    width: 100px;
+    width: 130px;
     font-weight: bold;
     float: left;
     padding-top: 8px;
@@ -36,8 +33,7 @@
 }
 
 .form-style-2 input.input-field {
-    width: 48%;
-
+    /*width: 48%;*/
 }
 
 .form-style-2 input.input-field,
@@ -70,11 +66,10 @@
     width: 55%;
 }
 
-.form-style-2 input[type=submit],
-.form-style-2 input[type=button] {
+.form-style-2 button{
     border: none;
     padding: 8px 15px 8px 15px;
-    background: #FF8500;
+    background: #05004a;
     color: #fff;
     box-shadow: 1px 1px 4px #DADADA;
     -moz-box-shadow: 1px 1px 4px #DADADA;
@@ -84,8 +79,7 @@
     -moz-border-radius: 3px;
 }
 
-.form-style-2 input[type=submit]:hover,
-.form-style-2 input[type=button]:hover {
+.form-style-2 button:hover{
     background: #EA7B00;
     color: #fff;
 }

@@ -1,10 +1,14 @@
-Dummy Form Filler for Firefox
-------
+Dummy Form Filler for Firefox and Chrome
+----------------------------------------
 
 **Simple extension that populates HTML forms with dummy data. 
 Useful for web developers and testers.**
 
-Install from the official Firefox [add-on page] (https://addons.mozilla.org/pl/firefox/addon/dummy-form-filler/). Try it [here] (https://rawgit.com/ptomaszek/dummy-form-filler/master/show.html).
+Get for:
+- Firefox - [Add-ons page] (https://addons.mozilla.org/pl/firefox/addon/dummy-form-filler/)
+- Chrome - [Web Store page] (TODO)
+
+Try it [here] (https://rawgit.com/ptomaszek/dummy-form-filler/master/show.html).
 
 ####Features:
 - Lack of features.
