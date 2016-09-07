@@ -7,6 +7,7 @@ and [Semantic Versioning](http://semver.org/).
 ### Added
 - Changelog file
 - Chrome support
+- Options
 
 ### Changed
 - Icon
