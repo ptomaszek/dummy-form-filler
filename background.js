@@ -4,7 +4,7 @@ chrome.browserAction.onClicked.addListener(function () {
         function (options) {
             chrome.storage.local.set(
                 options
-                , runDummyRun());
+                , runDummyRun()); //TODO delete () and check if works without the chain
         }
     )
 });

@@ -6,13 +6,14 @@ Useful for web developers and testers.**
 
 Get for:
 - Firefox - [Add-ons page] (https://addons.mozilla.org/pl/firefox/addon/dummy-form-filler/)
-- Chrome - [Web Store page] (TODO)
+- Chrome - [Web Store page] (https://chrome.google.com/webstore/detail/dummy-form-filler/npghpiokpleaiakfmalkmhkcloahfnad)
 
 Try it [here] (https://rawgit.com/ptomaszek/dummy-form-filler/master/show.html).
 
 ####Features:
 - Lack of features.
 - Works out of the box.
+- Configurable options (basics).
 - Perceives basic semantic hints (e.g. when a label contains 'age', 'year', 'phone' strings) and limitations (e.g. min, minlength).
 - Click again to reset all the forms (though should keep the original values).
 - Supported elements:

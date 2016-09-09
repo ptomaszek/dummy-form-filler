@@ -10,7 +10,6 @@ and [Semantic Versioning](http://semver.org/).
 - Options
 
 ### Changed
-- Icon
 - Extension rewritten from Add-on SDK to WebExtensions
 - Logic around radio buttons
 - show.html file (for dev purposes)
