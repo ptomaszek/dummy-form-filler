@@ -64,7 +64,18 @@ var DummyFormFiller = function () {
             $element.val(_generator.getDummyPhone());
         } else if ($element.is('textarea') && isEmptyVisibleAndEnabled($element)) {
             $element.val(chance.paragraph());
+        } else {
+            return;
         }
+
+
+        // publish low level DOM change event; it can be picked up by some frameworks like AngularJS
+        var event = new UIEvent("change", {
+            "view": window,
+            "bubbles": true,
+            "cancelable": true
+        });
+        $element[0].dispatchEvent(event);
     }
 
     function clickRandomInput($elements) {
@@ -139,7 +150,7 @@ var DummyFormFiller = function () {
                 break;
             case DummyPurposeEnum.UNDEFINED_PURPOSE:
             default:
-                var limits = DummyLimitsUtils.readAndAdjustMinlengthMaxLengthLimits($element);
+                var limits = DummyLimitsUtils.readAndAdjustMinLengthMaxLengthLimits($element);
                 $element.val(_generator.getDummyText(limits));
         }
     }

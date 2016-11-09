@@ -111,7 +111,7 @@ DummyLimitsUtils.readAndAdjustMinMaxLimits = function(purpose, $element){
  * Then if the limits contain min and max values they are
  * returned. Otherwise new values are created.
  */
-DummyLimitsUtils.readAndAdjustMinlengthMaxLengthLimits = function($element){
+DummyLimitsUtils.readAndAdjustMinLengthMaxLengthLimits = function($element){
     var limits = new DummyLimits($element);
     DummyLogger.log($element, 'read limits', this);
 
