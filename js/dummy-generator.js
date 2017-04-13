@@ -67,7 +67,7 @@ var DummyGenerator = function () {
     };
 
     this.populateWith = function ($element, optionName) {
-        chrome.storage.local.get(optionName, function (options) {
+        chrome.storage.local.get(DEFAULT_OPTIONS, function (options) {
             $element.val(options[optionName]);
         });
     };
