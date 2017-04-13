@@ -13,6 +13,7 @@ Try it [here] (https://rawgit.com/ptomaszek/dummy-form-filler/master/show.html).
 ####Features:
 - Lack of features.
 - Works out of the box.
+- Default shortcut Ctrl+Shift+X (can be changed in chrome://extensions/configureCommands)
 - Configurable options (basics).
 - Perceives basic semantic hints (e.g. when a label contains 'age', 'year', 'phone' strings) and limitations (e.g. min, minlength).
 - Click again to reset all the forms (though should keep the original values).

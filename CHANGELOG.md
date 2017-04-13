@@ -3,6 +3,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and [Semantic Versioning](http://semver.org/).
 
 
+
+## [1.2.0] - 2017-04-13
+### Added
+- Key shortcut
+
 ## [1.1.0] - 2016-11-09
 ### Added
 - Publish 'change' event (indirect support for AngularJS and possibly other frameworks)
