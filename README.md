@@ -5,12 +5,12 @@ Dummy Form Filler for Firefox and Chrome
 Useful for web developers and testers.**
 
 Get for:
-- Firefox - [Add-ons page] (https://addons.mozilla.org/pl/firefox/addon/dummy-form-filler/)
-- Chrome - [Web Store page] (https://chrome.google.com/webstore/detail/dummy-form-filler/npghpiokpleaiakfmalkmhkcloahfnad)
+- Firefox - [Add-ons page](https://addons.mozilla.org/pl/firefox/addon/dummy-form-filler/)
+- Chrome - [Web Store page](https://chrome.google.com/webstore/detail/dummy-form-filler/npghpiokpleaiakfmalkmhkcloahfnad)
 
-Try it [here] (https://rawgit.com/ptomaszek/dummy-form-filler/master/show.html).
+Try it [here](https://rawgit.com/ptomaszek/dummy-form-filler/master/show.html).
 
-####Features:
+#### Features:
 - Lack of features.
 - Works out of the box.
 - Default shortcut Alt+Shift+D (can be changed in chrome://extensions/configureCommands)
@@ -28,3 +28,13 @@ Thank you for reviews and raised issues. And for using the add-on.
 
 -----
 Recent changes in [CHANGELOG.md](CHANGELOG.md)
+
+-----
+### Development
+
+Use [web-ext](https://developer.mozilla.org/pl/Add-ons/WebExtensions/Getting_started_with_web-ext)
+
+```
+web-ext run --start-url https://rawgit.com/ptomaszek/dummy-form-filler/master/show.html
+web-ext build --artifacts-dir=
+```

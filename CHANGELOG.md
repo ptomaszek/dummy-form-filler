@@ -4,6 +4,13 @@ and [Semantic Versioning](http://semver.org/).
 
 
 
+## [1.2.3] - 2017-09-23
+### Fixed
+- Disabled the plugin for pages ending with '.xml'. See #20
+### Changed
+- Updated jQuery to the latest version
+- web-ext reference in README
+
 ## [1.2.0] - 2017-04-13
 ### Added
 - Key shortcut
