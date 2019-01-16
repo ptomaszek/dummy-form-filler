@@ -28,7 +28,7 @@ var DummyFormFiller = function () {
      * minlength.
      */
     function populateElementIfNotSetYet($element, $topParent) {
-        if ($element.is('[type=text]') && isEmptyVisibleAndEnabled($element)) {
+        if (isInputText($element) && isEmptyVisibleAndEnabled($element)) {
             populateWithRandomTextWisely($element);
         } else if ($element.is('[type=email]') && isEmptyVisibleAndEnabled($element)) {
             $element.val(_generator.getDummyEmail());
@@ -83,7 +83,6 @@ var DummyFormFiller = function () {
     }
 
     function clickRandomInputs($elements) {
-        var randomBoolean;
         $.each($elements, function () {
             if (chance.bool() && isVisible($(this)) && isEnabled($(this))) {
                 $($(this)).click();
@@ -190,6 +189,11 @@ var DummyFormFiller = function () {
         var limits = DummyLimitsUtils.readAndAdjustDateLimits($element);
 
         $element.val(_generator.getDummyDate(limits));
+    }
+
+    function isInputText($element) {
+        return $element.is('[type=text]')
+            || ($element.is('input') && !$element.is('[type]')); //or no input type is set, so it's the 'text' by default
     }
 
     function isEmptyVisibleAndEnabled($element) {

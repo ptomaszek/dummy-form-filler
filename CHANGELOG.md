@@ -5,9 +5,11 @@ and [Semantic Versioning](http://semver.org/).
 
 ## [1.3.0] - 2019-01-17
 ### Added
-- Configuration with node&npm
+- Configuration with node & npm
 ### Changed
-- Updated libs
+- Update libs
+### Fixed
+- Fix populating input element having no 'type' attr (it's assumed to be of type=text by default). See #21
 
 ## [1.2.3] - 2017-09-23
 ### Fixed
