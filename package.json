@@ -9,6 +9,7 @@
   "scripts": {
     "prepareDependencies": "npm install && node prepareDependencies.js",
     "web-ext:browser": "web-ext run --source-dir=src/",
-    "web-ext:build": "web-ext build --source-dir=src/ --overwrite-dest"
+    "web-ext:build": "web-ext build --source-dir=src/ --overwrite-dest",
+    "clean": "rm -r node_modules && rm -r src/js-ext && rm -r web-ext-artifacts"
   }
 }
