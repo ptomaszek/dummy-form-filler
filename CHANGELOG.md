@@ -10,6 +10,7 @@ and [Semantic Versioning](http://semver.org/).
 - Update libs
 ### Fixed
 - Fix populating input element having no 'type' attr (it's assumed to be of type=text by default). See #21
+- Fix maxlength in <textarea>. See #22
 
 ## [1.2.3] - 2017-09-23
 ### Fixed

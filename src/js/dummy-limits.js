@@ -1,4 +1,4 @@
-//TODO PT: DRY
+//TODO PT: DRY; also simplify, e.g. rather than limit range return the random value from the range
 function DummyLimits($element) {
     this.minlength = null;
     this.maxlength = null;
@@ -112,28 +112,33 @@ DummyLimitsUtils.readAndAdjustMinMaxLimits = function(purpose, $element){
  * returned. Otherwise new values are created.
  */
 DummyLimitsUtils.readAndAdjustMinLengthMaxLengthLimits = function($element){
-    var limits = new DummyLimits($element);
+    let limits = new DummyLimits($element);
     DummyLogger.log($element, 'read limits', this);
 
     //adjusting
     if (limits.minlength != null && limits.maxlength != null) {
         return limits;
     } else if (limits.minlength == null && limits.maxlength != null){
-        limits.minlength = new Number(chance.natural({
+        limits.minlength = Number(chance.natural({
             min : 1,
             max : limits.maxlength
             }));
     } else if (limits.maxlength == null && limits.minlength != null){
-        limits.maxlength = new Number(chance.natural({
+        limits.maxlength = Number(chance.natural({
             min : limits.minlength,
             max : limits.minlength + 5
             }));
     } else {
-        limits.minlength = 1;
-        limits.maxlength = 15;
+        if ($element.is('textarea')) {
+            limits.minlength = 100;
+            limits.maxlength = 500;
+        } else {
+            limits.minlength = 1;
+            limits.maxlength = 15;
+        }
     }
 
     DummyLogger.log($element, 'adjusted limits', limits);
 
     return limits;
-}
+};

@@ -84,5 +84,19 @@ var DummyGenerator = function () {
         }
     };
 
+    this.getDummyParagraph = function (limits) {
+        let length = chance.natural({
+            min: limits.minlength,
+            max: limits.maxlength
+        });
+
+        let paragraph = '';
+
+        while (paragraph.length < length) {
+            paragraph += chance.sentence() + ' ';
+        }
+        return paragraph.substring(0, length);
+    };
+
     return this;
 };

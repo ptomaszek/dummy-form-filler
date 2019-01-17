@@ -63,7 +63,8 @@ var DummyFormFiller = function () {
         } else if ($element.is('[type=tel]') && isEmptyVisibleAndEnabled($element)) {
             $element.val(_generator.getDummyPhone());
         } else if ($element.is('textarea') && isEmptyVisibleAndEnabled($element)) {
-            $element.val(chance.paragraph());
+            let limits = DummyLimitsUtils.readAndAdjustMinLengthMaxLengthLimits($element);
+            $element.val(_generator.getDummyParagraph(limits));
         } else {
             return;
         }
