@@ -30,11 +30,18 @@ Thank you for reviews and raised issues. And for using the add-on.
 Recent changes in [CHANGELOG.md](CHANGELOG.md)
 
 -----
-### Development
+### Development & package preparation
 
-Use [web-ext](https://developer.mozilla.org/pl/Add-ons/WebExtensions/Getting_started_with_web-ext)
-
-```
-web-ext run --start-url https://rawgit.com/ptomaszek/dummy-form-filler/master/show.html
-web-ext build --artifacts-dir=
-```
+1. Install [npm](https://www.npmjs.com/)
+1. Prepare dependencies
+    ```
+    npm run prepareDependencies
+    ```
+1. Start Firefox with the extension (development phase)
+    ```
+    npm run web-ext:browser -- --start-url=https://rawgit.com/ptomaszek/dummy-form-filler/master/show.html
+    ```
+1. Build final package
+    ```
+    npm run web-ext:build
+    ```

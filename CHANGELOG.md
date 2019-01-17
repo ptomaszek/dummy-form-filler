@@ -3,6 +3,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and [Semantic Versioning](http://semver.org/).
 
 
+## [1.3.0] - 2019-01-17
+### Added
+- Configuration with node&npm
+### Changed
+- Updated libs
 
 ## [1.2.3] - 2017-09-23
 ### Fixed

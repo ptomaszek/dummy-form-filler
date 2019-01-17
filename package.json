@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "chance": "1.0.18",
+    "jquery": "3.3.1"
+  },
+  "devDependencies": {
+    "web-ext": "2.9.3"
+  },
+  "scripts": {
+    "prepareDependencies": "npm install && node prepareDependencies.js",
+    "web-ext:browser": "web-ext run --source-dir=src/",
+    "web-ext:build": "web-ext build --source-dir=src/ --overwrite-dest"
+  }
+}
