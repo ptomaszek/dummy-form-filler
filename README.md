@@ -22,7 +22,7 @@ Try it [here](https://rawgit.com/ptomaszek/dummy-form-filler/master/show.html).
   - select
   - textarea
 
-Please note the logic of populating forms may not suite everyone, e.g. data that is already filled (existed before the page was loaded) will not be cleared and fitted with dummy data. If you think some behavior is terribly illogical, please give me a shout on github.
+_Please note the logic of populating forms may not suite everyone, e.g. data that is already filled (existed before the page was loaded) will not be cleared and fitted with dummy data. If you think some behavior is terribly illogical, please give me a shout on github._
 
 Thank you for reviews and raised issues. And for using the add-on.
 
