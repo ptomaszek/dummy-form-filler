@@ -18,9 +18,9 @@ Try it [here](https://rawgit.com/ptomaszek/dummy-form-filler/master/show.html).
 - Perceives basic semantic hints (e.g. when a label contains 'age', 'year', 'phone' strings) and limitations (e.g. min, minlength).
 - Click again to reset all the forms (though should keep the original values).
 - Supported elements:
- - input: text, email, number, radio, checkbox, tel, password, date, url
- - select
- - textarea
+  - input: text, email, number, radio, checkbox, tel, password, date, url
+  - select
+  - textarea
 
 Please note the logic of populating forms may not suite everyone, e.g. data that is already filled (existed before the page was loaded) will not be cleared and fitted with dummy data. If you think some behavior is terribly illogical, please give me a shout on github.
 
