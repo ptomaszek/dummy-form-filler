@@ -5,3 +5,4 @@ node_modules
 web-ext-artifacts
 npm-debug.log
 src/js-ext/
+/package-lock.json

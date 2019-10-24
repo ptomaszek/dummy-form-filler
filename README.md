@@ -35,7 +35,7 @@ Recent changes in [CHANGELOG.md](CHANGELOG.md)
 1. Install [npm](https://www.npmjs.com/)
 1. Prepare dependencies
     ```
-    npm run prepareDependencies
+    npm run prepare-dependencies
     ```
 1. Start Firefox with the extension (development phase)
     ```
