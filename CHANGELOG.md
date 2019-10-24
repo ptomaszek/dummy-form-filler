@@ -2,6 +2,12 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and [Semantic Versioning](http://semver.org/).
 
+## [1.3.1] - 2019-10-24
+### Changed
+- Updated libs
+### Fixed
+- Disabled picking of select's option that has empty value. See #23 
+- Removed source map declaration from .js. See #25
 
 ## [1.3.0] - 2019-01-17
 ### Added

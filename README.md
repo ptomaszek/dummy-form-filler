@@ -39,7 +39,7 @@ Recent changes in [CHANGELOG.md](CHANGELOG.md)
     ```
 1. Start Firefox with the extension (development phase)
     ```
-    npm run web-ext:browser -- --start-url=https://rawgit.com/ptomaszek/dummy-form-filler/master/show.html
+    npm run web-ext:browser -- --start-url=show.html
     ```
 1. Build final package
     ```

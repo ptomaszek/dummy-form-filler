@@ -122,7 +122,7 @@ var DummyFormFiller = function () {
 
         $select.find('option').each(function () {
             var selectText = $(this).text();
-            if (isEnabled($(this)) && $.trim(selectText) && !_augur.containsTexts(selectText, notRightfulTextsForSelect)) {
+            if (!isEmpty($(this)) && isEnabled($(this)) && $.trim(selectText) && !_augur.containsTexts(selectText, notRightfulTextsForSelect)) {
                 rightfulOptions.push($(this));
             }
         });
