@@ -2,6 +2,10 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and [Semantic Versioning](http://semver.org/).
 
+## [1.3.2] - 2020-05-23
+### Changed
+- Updated libs
+
 ## [1.3.1] - 2019-10-24
 ### Changed
 - Updated libs
