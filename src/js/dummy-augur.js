@@ -15,11 +15,11 @@ var DummyAugur = function() {
      * Considers: - min and max properties - name and label to guess input's
      * role, e.g. age, year
      */
-    this.defineInputPurpose = function($input) {
-        var purposeByLabel = this.defineInputPurpose($input);
+    this.defineInputPurpose = function(input) {
+        var purposeByLabel = this.defineInputPurpose(input);
 
         if (typeof purposeByLabel !== DummyPurposeEnum.UNDEFINED_PURPOSE) {
-            DummyLogger.log($input, 'purpose', purposeByLabel);
+            DummyLogger.log(input, 'purpose', purposeByLabel);
             return purposeByLabel;
         }
 
@@ -29,9 +29,9 @@ var DummyAugur = function() {
     /**
      * Considers label text: - phone - age - year
      */
-    this.defineInputPurpose = function($input) {
-        var stringRelatedToTheInput = this.getStringRelatedToTheInput($input);
-        DummyLogger.log($input, 'string related to the input', stringRelatedToTheInput);
+    this.defineInputPurpose = function(input) {
+        var stringRelatedToTheInput = this.getStringRelatedToTheInput(input);
+        DummyLogger.log(input, 'string related to the input', stringRelatedToTheInput);
 
         if (this.containsText(stringRelatedToTheInput, 'phone')) {
             return DummyPurposeEnum.PHONE_PURPOSE;
@@ -52,19 +52,22 @@ var DummyAugur = function() {
      *  - 'free' text before the input
      *  - id value
      *  - empty string ''
-     * @param $input
+     * @param input
      * @returns {*}
      */
-    this.getStringRelatedToTheInput = function($input) {
-        if ($input.prop('id')) {
-            var label = $('label[for="' + $input.prop('id') + '"]').text();
+    this.getStringRelatedToTheInput = function(input) {
+        if (input.id) {
+            var label = document.querySelector('label[for="' + input.id + '"]');
+            if (label) {
+                var labelText = label.textContent;
 
-            if(this.isNotEmpty(label)){
-                return label;
+                if(this.isNotEmpty(labelText)){
+                    return labelText;
+                }
             }
         }
 
-        var previousSibling = $input[0].previousSibling;
+        var previousSibling = input.previousSibling;
 
         if(previousSibling !== null) {
             var textBeforeInput = previousSibling.nodeValue;
@@ -73,14 +76,14 @@ var DummyAugur = function() {
             }
         }
 
-        if ($input.prop('id')) {
-            return $input.attr('id');
+        if (input.id) {
+            return input.getAttribute('id');
         }
         return '';
     };
 
     this.isNotEmpty = function(text) {
-        return $.trim(text);
+        return text.trim();
     };
 
     this.containsText = function(inString, text) {

@@ -13,5 +13,4 @@ function copyFile(filePath, destDir) {
     });
 }
 
-copyFile('node_modules/jquery/dist/jquery.min.js', jsDependenciesDir + 'jquery.min.js');
 copyFile('node_modules/chance/dist/chance.min.js', jsDependenciesDir  + 'chance.min.js');

@@ -30,13 +30,13 @@ var DummyGenerator = function () {
         }
 
         try {
-            var text = $.trim(chance.string({
+            var text = chance.string({
                 length: chance.natural({
                     min: limits.minlength,
                     max: limits.maxlength
                 }),
                 pool: DEI_KOBOL
-            }));
+            }).trim();
 
             return chance.capitalize(text);
         }
@@ -62,13 +62,13 @@ var DummyGenerator = function () {
         return chance.domain();
     };
 
-    this.withDummyPassword = function ($element) {
-        this.populateWith($element, CUSTOM_DUMMY_PASSWORD_KEY);
+    this.withDummyPassword = function (element) {
+        this.populateWith(element, CUSTOM_DUMMY_PASSWORD_KEY);
     };
 
-    this.populateWith = function ($element, optionName) {
+    this.populateWith = function (element, optionName) {
         chrome.storage.local.get(DEFAULT_OPTIONS, function (options) {
-            $element.val(options[optionName]);
+            element.value = options[optionName];
         });
     };
 

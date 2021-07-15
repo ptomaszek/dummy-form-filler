@@ -5,16 +5,16 @@ var DummyFormFiller = function () {
     var excludedNames = [];
 
     this.populateDummyData = function () {
-        var $here = $('html');
+        var here = document.documentElement;
         _augur = new DummyAugur();
         _generator = new DummyGenerator();
 
-        $here.find('form').each(function () {
-            $(this)[0].reset();
+        here.querySelectorAll('form').forEach(function (form) {
+            form.reset();
         });
 
-        $.each($here.find('input, select, textarea'), function () {
-            populateElementIfNotSetYet($(this), $here);
+        here.querySelectorAll('input, select, textarea').forEach(function (input) {
+            populateElementIfNotSetYet(input, here);
         });
         excludedNames = [];
     };
@@ -27,44 +27,44 @@ var DummyFormFiller = function () {
      * age, year. Ensures the value meets element's limitations, e.g. min,
      * minlength.
      */
-    function populateElementIfNotSetYet($element, $topParent) {
-        if (isInputText($element) && isEmptyVisibleAndEnabled($element)) {
-            populateWithRandomTextWisely($element);
-        } else if ($element.is('[type=email]') && isEmptyVisibleAndEnabled($element)) {
-            $element.val(_generator.getDummyEmail());
-        } else if ($element.is('[type=url]') && isEmptyVisibleAndEnabled($element)) {
-            $element.val('http://' + _generator.getDummyDomain());
-        } else if ($element.is('[type=radio]')) {
-            var groupName = $element.prop('name');
-            if (isEnabled($element) && !isExcluded(groupName)) {
-                var $radioInputs = findVisibleEnabledInputsByTypeAndName($topParent, 'radio', groupName);
-                if (!isAnyInputChecked($radioInputs)) {
-                    clickRandomInput($radioInputs);
+    function populateElementIfNotSetYet(element, topParent) {
+        if (isInputText(element) && isEmptyVisibleAndEnabled(element)) {
+            populateWithRandomTextWisely(element);
+        } else if (element.matches('[type=email]') && isEmptyVisibleAndEnabled(element)) {
+            element.value = _generator.getDummyEmail();
+        } else if (element.matches('[type=url]') && isEmptyVisibleAndEnabled(element)) {
+            element.value = 'http://' + _generator.getDummyDomain();
+        } else if (element.matches('[type=radio]')) {
+            var groupName = element.name;
+            if (isEnabled(element) && !isExcluded(groupName)) {
+                var radioInputs = findVisibleEnabledInputsByTypeAndName(topParent, 'radio', groupName);
+                if (!isAnyInputChecked(radioInputs)) {
+                    clickRandomInput(radioInputs);
                 }
                 excludedNames.push(groupName);
             }
-        } else if ($element.is('[type=checkbox]')) {
-            var groupName = $element.prop('name');
-            if (isVisible($element) && isEnabled($element) && !isExcluded(groupName)) {
-                var $checkboxInputs = findVisibleEnabledInputsByTypeAndName($topParent, 'checkbox', groupName);
-                if (!isAnyInputChecked($checkboxInputs)) {
-                    clickRandomInputs($checkboxInputs);
+        } else if (element.matches('[type=checkbox]')) {
+            var groupName = element.name;
+            if (isVisible(element) && isEnabled(element) && !isExcluded(groupName)) {
+                var checkboxInputs = findVisibleEnabledInputsByTypeAndName(topParent, 'checkbox', groupName);
+                if (!isAnyInputChecked(checkboxInputs)) {
+                    clickRandomInputs(checkboxInputs);
                 }
                 excludedNames.push(groupName);
             }
-        } else if ($element.is('[type=password]') && isEmptyVisibleAndEnabled($element)) {
-            _generator.withDummyPassword($element);
-        } else if ($element.is('select') && isSelectVisibleEnabledAndUnselected($element)) {
-            clickRandomOptionOrOptions($element);
-        } else if ($element.is('[type=number]') && isEmptyVisibleAndEnabled($element)) {
-            populateWithRandomNumberWisely($element);
-        } else if ($element.is('[type=date]') && isEmptyVisibleAndEnabled($element)) {
-            populateWithRandomDateWisely($element);
-        } else if ($element.is('[type=tel]') && isEmptyVisibleAndEnabled($element)) {
-            $element.val(_generator.getDummyPhone());
-        } else if ($element.is('textarea') && isEmptyVisibleAndEnabled($element)) {
-            let limits = DummyLimitsUtils.readAndAdjustMinLengthMaxLengthLimits($element);
-            $element.val(_generator.getDummyParagraph(limits));
+        } else if (element.matches('[type=password]') && isEmptyVisibleAndEnabled(element)) {
+            _generator.withDummyPassword(element);
+        } else if (element.matches('select') && isSelectVisibleEnabledAndUnselected(element)) {
+            clickRandomOptionOrOptions(element);
+        } else if (element.matches('[type=number]') && isEmptyVisibleAndEnabled(element)) {
+            populateWithRandomNumberWisely(element);
+        } else if (element.matches('[type=date]') && isEmptyVisibleAndEnabled(element)) {
+            populateWithRandomDateWisely(element);
+        } else if (element.matches('[type=tel]') && isEmptyVisibleAndEnabled(element)) {
+            element.value = _generator.getDummyPhone();
+        } else if (element.matches('textarea') && isEmptyVisibleAndEnabled(element)) {
+            let limits = DummyLimitsUtils.readAndAdjustMinLengthMaxLengthLimits(element);
+            element.value = _generator.getDummyParagraph(limits);
         } else {
             return;
         }
@@ -76,17 +76,17 @@ var DummyFormFiller = function () {
             "bubbles": true,
             "cancelable": true
         });
-        $element[0].dispatchEvent(event);
+        element.dispatchEvent(event);
     }
 
-    function clickRandomInput($elements) {
-        $(chance.pick($elements)).click();
+    function clickRandomInput(elements) {
+        chance.pick(elements).click();
     }
 
-    function clickRandomInputs($elements) {
-        $.each($elements, function () {
-            if (chance.bool() && isVisible($(this)) && isEnabled($(this))) {
-                $($(this)).click();
+    function clickRandomInputs(elements) {
+        elements.forEach(function (element) {
+            if (chance.bool() && isVisible(element) && isEnabled(element)) {
+                element.click();
             }
         });
     }
@@ -96,16 +96,16 @@ var DummyFormFiller = function () {
      * select single option if currently selected is rightfully selected. Does not
      * select multiple options if any already selected.
      */
-    function clickRandomOptionOrOptions($select) {
-        if ($select.prop('multiple')) {
-            $select.find('option').each(function () {
-                $(this).prop("selected", chance.bool());
+    function clickRandomOptionOrOptions(select) {
+        if (select.multiple) {
+            select.querySelectorAll('option').forEach(function (option) {
+                option.selected = chance.bool();
             });
         } else {
-            var rightfulOptions = getRightfulOptions($select);
+            var rightfulOptions = getRightfulOptions(select);
 
             if (rightfulOptions.length > 0) {
-                $(chance.pick(rightfulOptions)).prop("selected", true);
+                chance.pick(rightfulOptions).selected = true;
             }
         }
     }
@@ -116,14 +116,14 @@ var DummyFormFiller = function () {
      * - enabled
      * - not empty
      */
-    function getRightfulOptions($select) {
+    function getRightfulOptions(select) {
         var rightfulOptions = [];
         var notRightfulTextsForSelect = ['select', 'choose', 'pick', ' wybierz'];
 
-        $select.find('option').each(function () {
-            var selectText = $(this).text();
-            if (!isEmpty($(this)) && isEnabled($(this)) && $.trim(selectText) && !_augur.containsTexts(selectText, notRightfulTextsForSelect)) {
-                rightfulOptions.push($(this));
+        select.querySelectorAll('option').forEach(function (option) {
+            var selectText = option.textContent;
+            if (!isEmpty(option) && isEnabled(option) && selectText.trim() && !_augur.containsTexts(selectText, notRightfulTextsForSelect)) {
+                rightfulOptions.push(option);
             }
         });
 
@@ -136,22 +136,22 @@ var DummyFormFiller = function () {
      *   - min and max properties
      *   - name and label to guess input's role, e.g. age, year
      */
-    function populateWithRandomTextWisely($element) {
-        var purpose = _augur.defineInputPurpose($element);
+    function populateWithRandomTextWisely(element) {
+        var purpose = _augur.defineInputPurpose(element);
 
         switch (purpose) {
             case DummyPurposeEnum.PHONE_PURPOSE:
             case DummyPurposeEnum.AGE_PURPOSE:
             case DummyPurposeEnum.YEAR_PURPOSE:
-                populateWithRandomNumberWisely($element, purpose);
+                populateWithRandomNumberWisely(element, purpose);
                 break;
             case DummyPurposeEnum.EMAIL_PURPOSE:
-                $element.val(_generator.getDummyEmail());
+                element.value = _generator.getDummyEmail();
                 break;
             case DummyPurposeEnum.UNDEFINED_PURPOSE:
             default:
-                var limits = DummyLimitsUtils.readAndAdjustMinLengthMaxLengthLimits($element);
-                $element.val(_generator.getDummyText(limits));
+                var limits = DummyLimitsUtils.readAndAdjustMinLengthMaxLengthLimits(element);
+                element.value = _generator.getDummyText(limits);
         }
     }
 
@@ -160,25 +160,25 @@ var DummyFormFiller = function () {
      *   - min and max properties
      *   - name and label to guess input's role, e.g. age, year
      */
-    function populateWithRandomNumberWisely($element, purpose) {
-        purpose = (typeof purpose !== 'undefined') ? purpose : _augur.defineInputPurpose($element);
+    function populateWithRandomNumberWisely(element, purpose) {
+        purpose = (typeof purpose !== 'undefined') ? purpose : _augur.defineInputPurpose(element);
 
         switch (purpose) {
             case DummyPurposeEnum.PHONE_PURPOSE:
-                $element.val(_generator.getDummyPhone());
+                element.value = _generator.getDummyPhone();
                 break;
             case DummyPurposeEnum.AGE_PURPOSE:
-                var ageLimits = DummyLimitsUtils.readAndAdjustMinMaxLimits(DummyPurposeEnum.AGE_PURPOSE, $element);
-                $element.val(_generator.getDummyNumber(ageLimits));
+                var ageLimits = DummyLimitsUtils.readAndAdjustMinMaxLimits(DummyPurposeEnum.AGE_PURPOSE, element);
+                element.value = _generator.getDummyNumber(ageLimits);
                 break;
             case DummyPurposeEnum.YEAR_PURPOSE:
-                var yearLimits = DummyLimitsUtils.readAndAdjustMinMaxLimits(DummyPurposeEnum.YEAR_PURPOSE, $element);
-                $element.val(_generator.getDummyNumber(yearLimits));
+                var yearLimits = DummyLimitsUtils.readAndAdjustMinMaxLimits(DummyPurposeEnum.YEAR_PURPOSE, element);
+                element.value = _generator.getDummyNumber(yearLimits);
                 break;
             case DummyPurposeEnum.UNDEFINED_PURPOSE:
             default:
-                var limits = DummyLimitsUtils.readAndAdjustMinMaxLimits(null, $element);
-                $element.val(_generator.getDummyNumber(limits));
+                var limits = DummyLimitsUtils.readAndAdjustMinMaxLimits(null, element);
+                element.value = _generator.getDummyNumber(limits);
         }
     }
 
@@ -186,30 +186,30 @@ var DummyFormFiller = function () {
      * Populates given element with a random date. Considers:
      *   - min and max properties
      */
-    function populateWithRandomDateWisely($element) {
-        var limits = DummyLimitsUtils.readAndAdjustDateLimits($element);
+    function populateWithRandomDateWisely(element) {
+        var limits = DummyLimitsUtils.readAndAdjustDateLimits(element);
 
-        $element.val(_generator.getDummyDate(limits));
+        element.value = _generator.getDummyDate(limits);
     }
 
-    function isInputText($element) {
-        return $element.is('[type=text]')
-            || ($element.is('input') && !$element.is('[type]')); //or no input type is set, so it's the 'text' by default
+    function isInputText(element) {
+        return element.matches('[type=text]')
+            || (element.matches('input') && !element.matches('[type]')); //or no input type is set, so it's the 'text' by default
     }
 
-    function isEmptyVisibleAndEnabled($element) {
-        return isEmpty($element) && isVisible($element) && isEnabled($element);
+    function isEmptyVisibleAndEnabled(element) {
+        return isEmpty(element) && isVisible(element) && isEnabled(element);
     }
 
-    function isSelectVisibleEnabledAndUnselected($select) {
-        return isVisible($select) && isEnabled($select) && !isAnyRightfulOptionSelected($select);
+    function isSelectVisibleEnabledAndUnselected(select) {
+        return isVisible(select) && isEnabled(select) && !isAnyRightfulOptionSelected(select);
     }
 
-    function isAnyRightfulOptionSelected($select) {
-        var rightfulOptions = getRightfulOptions($select);
+    function isAnyRightfulOptionSelected(select) {
+        var rightfulOptions = getRightfulOptions(select);
 
         for (var i = 0; i < rightfulOptions.length; ++i) {
-            if ($(rightfulOptions[i]).prop('selected')) {
+            if (rightfulOptions[i].selected) {
                 return true;
             }
         }
@@ -217,22 +217,26 @@ var DummyFormFiller = function () {
         return false;
     }
 
-    function isEmpty($element) {
-        return !$.trim($element.val());
+    function isEmpty(element) {
+        return !element.value.trim();
     }
 
-    function isVisible($element) {
-        return $element.is(":visible");
+    /**
+     * Taken from jQuery.
+     * https://github.com/jquery/jquery/blob/main/src/css/hiddenVisibleSelectors.js
+     */
+    function isVisible(element) {
+        return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
     }
 
-    function isEnabled($element) {
-        return $element.is(":enabled");
+    function isEnabled(element) {
+        return element.matches(":enabled");
     }
 
-    function isAnyInputChecked($elements) {
+    function isAnyInputChecked(elements) {
         var anyInputChecked = false;
-        $elements.each(function () {
-            if ($(this).is(':checked')) {
+        elements.forEach(function (element) {
+            if (element.matches(':checked')) {
                 anyInputChecked = true;
                 return false; // breaks the loop only; does not return anything from the method
             }
@@ -241,12 +245,12 @@ var DummyFormFiller = function () {
         return anyInputChecked;
     }
 
-    function findVisibleEnabledInputsByTypeAndName($here, type, name) {
-        return $here.find('input[type=' + type + '][name="' + name + '"]:visible:enabled');
+    function findVisibleEnabledInputsByTypeAndName(here, type, name) {
+        return Array.from(here.querySelectorAll('input[type=' + type + '][name="' + name + '"]:enabled')).filter(isVisible);
     }
 
     function isExcluded(groupName) {
-        return $.inArray(groupName, excludedNames) !== -1;
+        return excludedNames.includes(groupName);
     }
 
     return this;

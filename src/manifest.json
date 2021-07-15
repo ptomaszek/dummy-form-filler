@@ -41,7 +41,6 @@
       ],
       "js": [
         "options/options_defaults.js",
-        "js-ext/jquery.min.js",
         "js-ext/chance.min.js",
         "js/dummy-logger.js",
         "js/dummy-augur.js",

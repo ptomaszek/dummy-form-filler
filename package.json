@@ -1,7 +1,6 @@
 {
   "dependencies": {
-    "chance": "1.1.5",
-    "jquery": "3.5.1"
+    "chance": "1.1.5"
   },
   "devDependencies": {
     "web-ext": "4.2.0"
