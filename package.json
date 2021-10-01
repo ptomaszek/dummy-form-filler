@@ -4,7 +4,8 @@
     "node": ">=19.6.0"
   },
   "dependencies": {
-    "chance": "^1.1.8"
+    "chance": "^1.1.8",
+    "reregexp": "^1.6.0"
   },
   "devDependencies": {
     "web-ext": "^7.4.0"

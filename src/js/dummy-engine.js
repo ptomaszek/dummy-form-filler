@@ -137,10 +137,17 @@ export const DummyFormFiller = function () {
     /**
      * Populates given element with a random text or readdresses the task to more
      * appropriate populator. Considers:
+     *   - pattern property
      *   - min and max properties
      *   - name and label to guess input's role, e.g. age, year
      */
     function populateWithRandomTextWisely(element) {
+        if (element.pattern) {
+            element.value = _generator.getDummyTextMatchingPattern(element.pattern);
+            // TODO: reregexp does not support {min,max,}length attributes
+            return;
+        }
+
         var purpose = _augur.defineInputPurpose(element);
 
         switch (purpose) {

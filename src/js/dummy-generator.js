@@ -8,6 +8,7 @@ async function require(modulePath) {
     return exports;
 }
 const { Chance } = await require('../js-ext/chance.min.js');
+const { default: ReRegExp } = await require('../js-ext/reregexp.js');
 
 import { DummyLogger } from './dummy-logger.js';
 import { DEFAULT_OPTIONS, CUSTOM_DUMMY_PASSWORD_KEY } from '../options/options_defaults.js';
@@ -55,6 +56,19 @@ export function DummyGenerator() {
             }).trim();
 
             return this.chance.capitalize(text);
+        }
+        catch (err) {
+            DummyLogger.log(err);
+        }
+    };
+
+    /**
+     * Returns random text matching given regexp pattern.
+     */
+    this.getDummyTextMatchingPattern = function (pattern) {
+        try {
+            const reregexp = new ReRegExp(pattern);
+            return reregexp.build();
         }
         catch (err) {
             DummyLogger.log(err);
