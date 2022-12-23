@@ -27,28 +27,20 @@
   },
   "background": {
     "scripts": [
-      "options/options_defaults.js", "background.js"
+      "background.js"
     ],
     "persistent": false
   },
 
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "exclude_matches": [
-        "*://*/*.xml",
-        "file:///*/*.xml"
-      ],
-      "js": [
-        "options/options_defaults.js",
-        "js-ext/chance.min.js",
-        "js/dummy-logger.js",
-        "js/dummy-augur.js",
-        "js/dummy-limits.js",
-        "js/dummy-generator.js",
-        "js/dummy-engine.js"
-      ]
-    }
+  "web_accessible_resources": [
+    "js-ext/chance.min.js",
+    "js/dummy-augur.js",
+    "js/dummy-engine.js",
+    "js/dummy-generator.js",
+    "js/dummy-limits.js",
+    "js/dummy-logger.js",
+    "js/main.js",
+    "options/options_defaults.js"
   ],
 
   "options_ui": {

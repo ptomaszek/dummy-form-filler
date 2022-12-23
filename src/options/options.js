@@ -1,3 +1,5 @@
+import { DEFAULT_OPTIONS, CUSTOM_DUMMY_PASSWORD_KEY, LOGGING_ENABLED_KEY } from './options_defaults.js';
+
 function saveOptions() {
     var options = {};
     options[CUSTOM_DUMMY_PASSWORD_KEY] = document.querySelector('#dummyPassword').value;

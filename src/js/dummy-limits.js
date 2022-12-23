@@ -1,3 +1,6 @@
+import { DummyLogger } from './dummy-logger.js';
+import { DummyPurposeEnum } from './dummy-augur.js';
+
 //TODO PT: DRY; also simplify, e.g. rather than limit range return the random value from the range
 function DummyLimits(element) {
     this.minlength = null;
@@ -33,14 +36,12 @@ function DummyDateLimits(element) {
     }
 }
 
-var DummyLimitsUtils = {}
-
 /**
  * Reads min and max limits from a date input.
  * Then if the limits contain min and max values they are
  * returned. Otherwise new values are created.
  */
-DummyLimitsUtils.readAndAdjustDateLimits = function(element){
+export function readAndAdjustDateLimits(element){
     var limits = new DummyDateLimits(element);
     DummyLogger.log(element, 'read limits', this);
 
@@ -71,7 +72,7 @@ DummyLimitsUtils.readAndAdjustDateLimits = function(element){
  * Then if the limits contain min and max values they are
  * returned. Otherwise new values are created for provided purpose.
  */
-DummyLimitsUtils.readAndAdjustMinMaxLimits = function(purpose, element){
+export function readAndAdjustMinMaxLimits(purpose, element){
     var limits = new DummyLimits(element);
     DummyLogger.log(element, 'read limits', this);
 
@@ -111,7 +112,7 @@ DummyLimitsUtils.readAndAdjustMinMaxLimits = function(purpose, element){
  * Then if the limits contain min and max values they are
  * returned. Otherwise new values are created.
  */
-DummyLimitsUtils.readAndAdjustMinLengthMaxLengthLimits = function(element){
+export function readAndAdjustMinLengthMaxLengthLimits(element){
     let limits = new DummyLimits(element);
     DummyLogger.log(element, 'read limits', this);
 

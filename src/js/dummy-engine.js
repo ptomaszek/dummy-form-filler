@@ -1,4 +1,8 @@
-var DummyFormFiller = function () {
+import { DummyAugur, DummyPurposeEnum } from './dummy-augur.js';
+import { readAndAdjustMinLengthMaxLengthLimits, readAndAdjustMinMaxLimits, readAndAdjustDateLimits } from './dummy-limits.js';
+import { DummyGenerator } from './dummy-generator.js';
+
+export const DummyFormFiller = function () {
 
     var _augur;
     var _generator;
@@ -63,7 +67,7 @@ var DummyFormFiller = function () {
         } else if (element.matches('[type=tel]') && isEmptyVisibleAndEnabled(element)) {
             element.value = _generator.getDummyPhone();
         } else if (element.matches('textarea') && isEmptyVisibleAndEnabled(element)) {
-            let limits = DummyLimitsUtils.readAndAdjustMinLengthMaxLengthLimits(element);
+            let limits = readAndAdjustMinLengthMaxLengthLimits(element);
             element.value = _generator.getDummyParagraph(limits);
         } else {
             return;
@@ -80,12 +84,12 @@ var DummyFormFiller = function () {
     }
 
     function clickRandomInput(elements) {
-        chance.pick(elements).click();
+        _generator.chance.pick(elements).click();
     }
 
     function clickRandomInputs(elements) {
         elements.forEach(function (element) {
-            if (chance.bool() && isVisible(element) && isEnabled(element)) {
+            if (_generator.chance.bool() && isVisible(element) && isEnabled(element)) {
                 element.click();
             }
         });
@@ -99,13 +103,13 @@ var DummyFormFiller = function () {
     function clickRandomOptionOrOptions(select) {
         if (select.multiple) {
             select.querySelectorAll('option').forEach(function (option) {
-                option.selected = chance.bool();
+                option.selected = _generator.chance.bool();
             });
         } else {
             var rightfulOptions = getRightfulOptions(select);
 
             if (rightfulOptions.length > 0) {
-                chance.pick(rightfulOptions).selected = true;
+                _generator.chance.pick(rightfulOptions).selected = true;
             }
         }
     }
@@ -150,7 +154,7 @@ var DummyFormFiller = function () {
                 break;
             case DummyPurposeEnum.UNDEFINED_PURPOSE:
             default:
-                var limits = DummyLimitsUtils.readAndAdjustMinLengthMaxLengthLimits(element);
+                var limits = readAndAdjustMinLengthMaxLengthLimits(element);
                 element.value = _generator.getDummyText(limits);
         }
     }
@@ -168,16 +172,16 @@ var DummyFormFiller = function () {
                 element.value = _generator.getDummyPhone();
                 break;
             case DummyPurposeEnum.AGE_PURPOSE:
-                var ageLimits = DummyLimitsUtils.readAndAdjustMinMaxLimits(DummyPurposeEnum.AGE_PURPOSE, element);
+                var ageLimits = readAndAdjustMinMaxLimits(DummyPurposeEnum.AGE_PURPOSE, element);
                 element.value = _generator.getDummyNumber(ageLimits);
                 break;
             case DummyPurposeEnum.YEAR_PURPOSE:
-                var yearLimits = DummyLimitsUtils.readAndAdjustMinMaxLimits(DummyPurposeEnum.YEAR_PURPOSE, element);
+                var yearLimits = readAndAdjustMinMaxLimits(DummyPurposeEnum.YEAR_PURPOSE, element);
                 element.value = _generator.getDummyNumber(yearLimits);
                 break;
             case DummyPurposeEnum.UNDEFINED_PURPOSE:
             default:
-                var limits = DummyLimitsUtils.readAndAdjustMinMaxLimits(null, element);
+                var limits = readAndAdjustMinMaxLimits(null, element);
                 element.value = _generator.getDummyNumber(limits);
         }
     }
@@ -187,7 +191,7 @@ var DummyFormFiller = function () {
      *   - min and max properties
      */
     function populateWithRandomDateWisely(element) {
-        var limits = DummyLimitsUtils.readAndAdjustDateLimits(element);
+        var limits = readAndAdjustDateLimits(element);
 
         element.value = _generator.getDummyDate(limits);
     }
@@ -254,4 +258,4 @@ var DummyFormFiller = function () {
     }
 
     return this;
-}();
+};

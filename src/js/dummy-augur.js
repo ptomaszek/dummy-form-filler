@@ -1,4 +1,6 @@
-var DummyPurposeEnum = {
+import { DummyLogger } from './dummy-logger.js';
+
+export const DummyPurposeEnum = {
     /** Input purposes */
     PHONE_PURPOSE: 'phone_purpose',
     AGE_PURPOSE: 'age_purpose',
@@ -9,7 +11,7 @@ var DummyPurposeEnum = {
     UNDEFINED_PURPOSE: 'undefined_purpose'
 };
 
-var DummyAugur = function() {
+export function DummyAugur() {
 
     /**
      * Considers: - min and max properties - name and label to guess input's
