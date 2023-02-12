@@ -1,4 +1,8 @@
 {
+  "engines": {
+    "npm": ">=9.4.0",
+    "node": ">=19.6.0"
+  },
   "dependencies": {
     "chance": "^1.1.8"
   },

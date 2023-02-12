@@ -32,7 +32,10 @@ Recent changes in [CHANGELOG.md](CHANGELOG.md)
 -----
 ### Development & package preparation
 
-1. Install [npm](https://www.npmjs.com/)
+1. Install [npm](https://www.npmjs.com/), best via [nvm](https://github.com/nvm-sh/nvm), e.g.:
+   ```
+   nvm install node
+   ```
 1. Prepare dependencies
     ```
     npm run prepare-dependencies
