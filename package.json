@@ -1,9 +1,13 @@
 {
+  "engines": {
+    "npm": ">=9.4.0",
+    "node": ">=19.6.0"
+  },
   "dependencies": {
-    "chance": "1.1.5"
+    "chance": "^1.1.8"
   },
   "devDependencies": {
-    "web-ext": "4.2.0"
+    "web-ext": "^7.4.0"
   },
   "scripts": {
     "prepare-dependencies": "npm install && node prepareDependencies.js && npm run delete-references-to-map-files",
