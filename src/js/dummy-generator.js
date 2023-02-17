@@ -1,9 +1,26 @@
-var DummyGenerator = function () {
+// Does not support ES modules.
+async function require(modulePath) {
+    const oldExports = window.exports;
+    window.exports = { };
+    await import(modulePath);
+    const exports = window.exports;
+    window.exports = oldExports;
+    return exports;
+}
+const { Chance } = await require('../js-ext/chance.min.js');
+const { default: ReRegExp } = await require('../js-ext/reregexp.js');
+
+import { DummyLogger } from './dummy-logger.js';
+import { DEFAULT_OPTIONS, CUSTOM_DUMMY_PASSWORD_KEY } from '../options/options_defaults.js';
+
+export function DummyGenerator() {
+    this.chance = new Chance();
+
     var DEI_KOBOL = 'Dei Kobol una apita uthoukarana ' + 'Ukthea mavatha gaman kerimuta '
         + 'Obe satharane mua osavathamanabanta ' + 'Api obata yagnya karama'
         + 'phnglui mglwnafh Cthulhu R\'lyeh wgah\'nagl fhtagn';
 
-    var DUMMY_EMAIL = chance.email();
+    var DUMMY_EMAIL = this.chance.email();
 
     /**
      * Returns random number that meets given limitations, i.e. min and max
@@ -11,7 +28,7 @@ var DummyGenerator = function () {
      */
     this.getDummyNumber = function (limits) {
         try {
-            return chance.natural({
+            return this.chance.natural({
                 min: limits.min,
                 max: limits.max
             });
@@ -30,15 +47,28 @@ var DummyGenerator = function () {
         }
 
         try {
-            var text = chance.string({
-                length: chance.natural({
+            var text = this.chance.string({
+                length: this.chance.natural({
                     min: limits.minlength,
                     max: limits.maxlength
                 }),
                 pool: DEI_KOBOL
             }).trim();
 
-            return chance.capitalize(text);
+            return this.chance.capitalize(text);
+        }
+        catch (err) {
+            DummyLogger.log(err);
+        }
+    };
+
+    /**
+     * Returns random text matching given regexp pattern.
+     */
+    this.getDummyTextMatchingPattern = function (pattern) {
+        try {
+            const reregexp = new ReRegExp(pattern);
+            return reregexp.build();
         }
         catch (err) {
             DummyLogger.log(err);
@@ -49,7 +79,7 @@ var DummyGenerator = function () {
      * Returns random phone number.
      */
     this.getDummyPhone = function (limits) {
-        return chance.phone({
+        return this.chance.phone({
             formatted: false
         });
     };
@@ -59,7 +89,7 @@ var DummyGenerator = function () {
     };
 
     this.getDummyDomain = function () {
-        return chance.domain();
+        return this.chance.domain();
     };
 
     this.withDummyPassword = function (element) {
@@ -74,7 +104,7 @@ var DummyGenerator = function () {
 
     this.getDummyDate = function (limits) {
         try {
-            return chance.date({
+            return this.chance.date({
                 min: limits.min,
                 max: limits.max
             }).toISOString().split('T')[0];
@@ -85,7 +115,7 @@ var DummyGenerator = function () {
     };
 
     this.getDummyParagraph = function (limits) {
-        let length = chance.natural({
+        let length = this.chance.natural({
             min: limits.minlength,
             max: limits.maxlength
         });
@@ -93,7 +123,7 @@ var DummyGenerator = function () {
         let paragraph = '';
 
         while (paragraph.length < length) {
-            paragraph += chance.sentence() + ' ';
+            paragraph += this.chance.sentence() + ' ';
         }
         return paragraph.substring(0, length);
     };
