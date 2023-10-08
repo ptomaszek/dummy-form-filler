@@ -1,9 +1,9 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Dummy Form Filler",
   "short_name": "Dummy FF",
   "description": "One click to populate HTML forms with dummy data. Works out of the box.",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "homepage_url": "https://github.com/ptomaszek/dummy-form-filler",
   "icons": {
     "48": "icons/seahorse_48.png",
@@ -13,10 +13,10 @@
   },
 
   "permissions": [
-    "activeTab", "storage"
+    "activeTab", "storage", "scripting"
   ],
 
-  "browser_action": {
+  "action": {
     "default_icon": {
       "48": "icons/seahorse_48.png",
       "64": "icons/seahorse_64.png",
@@ -26,10 +26,8 @@
     "default_title": "Dummy Form Filler"
   },
   "background": {
-    "scripts": [
-      "options/options_defaults.js", "background.js"
-    ],
-    "persistent": false
+    "service_worker": "background.js",
+    "type": "module"
   },
 
   "content_scripts": [
@@ -56,7 +54,7 @@
   },
 
   "commands": {
-    "_execute_browser_action": {
+    "_execute_action": {
       "suggested_key": {
         "default": "Alt+Shift+D"
       },
