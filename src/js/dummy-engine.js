@@ -137,6 +137,11 @@ var DummyFormFiller = function () {
      *   - name and label to guess input's role, e.g. age, year
      */
     function populateWithRandomTextWisely(element) {
+        if (element.pattern) {
+            element.value = _generator.getDummyTextMatchingPattern(element.pattern);
+            return;
+        }
+
         var purpose = _augur.defineInputPurpose(element);
 
         switch (purpose) {

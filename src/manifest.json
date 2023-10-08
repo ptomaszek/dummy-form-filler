@@ -42,6 +42,7 @@
       "js": [
         "options/options_defaults.js",
         "js-ext/chance.min.js",
+        "js-ext/reregexp.js",
         "js/dummy-logger.js",
         "js/dummy-augur.js",
         "js/dummy-limits.js",

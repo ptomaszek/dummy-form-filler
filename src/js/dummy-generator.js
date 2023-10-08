@@ -46,6 +46,18 @@ var DummyGenerator = function () {
     };
 
     /**
+     * Returns random text matching given regexp pattern.
+     */
+    this.getDummyTextMatchingPattern = function (pattern) {
+        try {
+            return "";
+        }
+        catch (err) {
+            DummyLogger.log(err);
+        }
+    };
+
+    /**
      * Returns random phone number.
      */
     this.getDummyPhone = function (limits) {
