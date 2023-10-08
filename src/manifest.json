@@ -26,8 +26,10 @@
     "default_title": "Dummy Form Filler"
   },
   "background": {
-    "service_worker": "background.js",
-    "type": "module"
+    "scripts": [
+      "options/options_defaults.js", "background.js"
+    ],
+    "persistent": false
   },
 
   "content_scripts": [
