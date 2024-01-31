@@ -2,6 +2,10 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and [Semantic Versioning](http://semver.org/).
 
+## [1.5.0] - 2024-02-03
+### Changed
+- Improved configurability
+
 ## [1.4.0] - 2023-10-08
 ### Changed
 - Migrated to Manifest v3 (different setup for Chrome and Firefox)

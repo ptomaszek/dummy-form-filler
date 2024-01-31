@@ -1,26 +1,47 @@
-function saveOptions() {
-    var options = {};
-    options[CUSTOM_DUMMY_PASSWORD_KEY] = document.querySelector('#dummyPassword').value;
-    options[LOGGING_ENABLED_KEY] = document.querySelector('#log').checked;
 
-    chrome.storage.local.set(options);
-}
 
-function loadOptions() {
-    chrome.storage.local.get(
-        DEFAULT_OPTIONS
-        , function (options) {
-            document.querySelector('#dummyPassword').value = options[CUSTOM_DUMMY_PASSWORD_KEY];
-            document.querySelector('#log').checked = options[LOGGING_ENABLED_KEY];
-        });
-}
+const loadOptions = () => {
+  chrome.storage.sync.get(
+    DEFAULT_OPTIONS,
+    (items) => {
+      document.getElementById('textCharactersPool').value = items.textCharactersPool;
+      document.getElementById('textStrategy').value = items.textStrategy;
+      document.getElementById('password').value = items.password;
+      document.getElementById('loggingEnabled').checked = items.loggingEnabled;
+    }
+  );
+};
 
-function resetOptions() {
-    chrome.storage.local.clear(function () {
-        chrome.storage.local.set(DEFAULT_OPTIONS);
-    });
-}
+const saveOptions = () => {
+  chrome.storage.sync.set(
+    {
+        textCharactersPool: document.getElementById('textCharactersPool').value,
+        textStrategy: document.getElementById('textStrategy').value,
+        password: document.getElementById('password').value,
+        loggingEnabled: document.getElementById('loggingEnabled').checked
+    },
+    () => {
+      const status = document.getElementById('status');
+      status.textContent = 'Options saved.';
+      setTimeout(() => {
+        status.textContent = '';
+      }, 1250);
+    }
+  );
+};
+
+const resetDefaultOptions = () => {
+    document.getElementById('textCharactersPool').value = DEFAULT_OPTIONS.textCharactersPool;
+    document.getElementById('textStrategy').value = DEFAULT_OPTIONS.textStrategy;
+    document.getElementById('password').value = DEFAULT_OPTIONS.password;
+    document.getElementById('loggingEnabled').checked = DEFAULT_OPTIONS.loggingEnabled;
+};
+
+const exit = () => {
+    window.close();
+};
 
 document.addEventListener('DOMContentLoaded', loadOptions);
-document.querySelector('#save').addEventListener('click', saveOptions);
-document.querySelector('#reset').addEventListener('click', resetOptions);
+document.getElementById('save').addEventListener('click', saveOptions);
+document.getElementById('exit').addEventListener('click', exit);
+document.getElementById('reset').addEventListener('click', resetDefaultOptions);
