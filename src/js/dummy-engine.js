@@ -2,12 +2,14 @@ var DummyFormFiller = function () {
 
     var _augur;
     var _generator;
+    var _options;
     var excludedNames = [];
 
     this.populateDummyData = function () {
         var here = document.documentElement;
         _augur = new DummyAugur();
-        _generator = new DummyGenerator();
+        _options = new DummyOptions();
+        _generator = new DummyGenerator(_options);
 
         here.querySelectorAll('form').forEach(function (form) {
             form.reset();
@@ -53,7 +55,7 @@ var DummyFormFiller = function () {
                 excludedNames.push(groupName);
             }
         } else if (element.matches('[type=password]') && isEmptyVisibleAndEnabled(element)) {
-            _generator.withDummyPassword(element);
+            populateWithPassword(element);
         } else if (element.matches('select') && isSelectVisibleEnabledAndUnselected(element)) {
             clickRandomOptionOrOptions(element);
         } else if (element.matches('[type=number]') && isEmptyVisibleAndEnabled(element)) {
@@ -151,7 +153,8 @@ var DummyFormFiller = function () {
             case DummyPurposeEnum.UNDEFINED_PURPOSE:
             default:
                 var limits = DummyLimitsUtils.readAndAdjustMinLengthMaxLengthLimits(element);
-                element.value = _generator.getDummyText(limits);
+                _generator.getDummyText(limits)
+                    .then(resp => element.value = resp);
         }
     }
 
@@ -190,6 +193,10 @@ var DummyFormFiller = function () {
         var limits = DummyLimitsUtils.readAndAdjustDateLimits(element);
 
         element.value = _generator.getDummyDate(limits);
+    }
+
+    function populateWithPassword(element) {
+        _generator.getDummyPassword(element).then(resp => element.value = resp);
     }
 
     function isInputText(element) {

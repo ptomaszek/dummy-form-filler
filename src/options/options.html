@@ -1,35 +1,38 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+    <title>Options</title>
     <link rel="stylesheet" type="text/css" href="options.css">
 </head>
-
 <body>
-<div class="form-style-2">
-    <fieldset>
-        <legend class="form-style-2-heading">Options</legend>
-
-        <form>
-            <label for="dummyPassword">
-                <span>Default <i>password</i> value</span><input type="text" class="input-field" id="dummyPassword"/>
-            </label>
-            <br>
-            <hr>
-            <label for="log">
-                <span>Print debug info to <i>console</i></span><input type="checkbox" id="log"/>
-            </label>
-
-            <br><br>
-            <button id="save">Save</button>
-            <button id="reset" class="right">Reset to defaults</button>
-        </form>
-    </fieldset>
+<div class="optionLine">
+    <label for="textCharactersPool"><b>text</b> input characters pool</label>
+    <textarea id="textCharactersPool" cols="20" rows="3"></textarea>
+</div>
+<div class="optionLine">
+    <label for="textStrategy"><b>text</b> input strategy</label>
+    <select id="textStrategy">
+        <option value="plain">Use random characters from the pool</option>
+        <option value="capitalizeFirstAndLowercaseRemaining">Capitalize the first character and make the rest lowercase</option>
+    </select>
+</div>
+<div class="optionLine">
+    <label for="password"><b>password</b> value</label>
+    <input type="text" id="password"/>
 </div>
 
-<script src="options_defaults.js"></script>
+<hr>
+<div class="optionLine">
+    <label for="loggingEnabled">Print debug info to <i>console</i> </label>
+    <input type="checkbox" id="loggingEnabled"/>
+</div>
+
+<div id="status"></div>
+<button id="save">Save</button>
+<button id="exit">Exit</button>
+<button id="reset" class="right">Reset to defaults</button>
+
+<script src="default-options.js"></script>
 <script src="options.js"></script>
 </body>
-
 </html>

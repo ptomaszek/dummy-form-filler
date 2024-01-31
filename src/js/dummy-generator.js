@@ -1,8 +1,4 @@
-var DummyGenerator = function () {
-    var DEI_KOBOL = 'Dei Kobol una apita uthoukarana ' + 'Ukthea mavatha gaman kerimuta '
-        + 'Obe satharane mua osavathamanabanta ' + 'Api obata yagnya karama'
-        + 'phnglui mglwnafh Cthulhu R\'lyeh wgah\'nagl fhtagn';
-
+var DummyGenerator = function (_options) {
     var DUMMY_EMAIL = chance.email();
 
     /**
@@ -29,20 +25,30 @@ var DummyGenerator = function () {
             return;
         }
 
-        try {
-            var text = chance.string({
+        return Promise.all([
+            _options.getOption('textCharactersPool'),
+            _options.getOption('textStrategy')
+        ])
+        .then(([
+            textCharactersPool,
+            textStrategy
+        ]) => {
+            let text = chance.string({
                 length: chance.natural({
                     min: limits.minlength,
                     max: limits.maxlength
                 }),
-                pool: DEI_KOBOL
+                pool: textCharactersPool
             }).trim();
 
-            return chance.capitalize(text);
-        }
-        catch (err) {
-            DummyLogger.log(err);
-        }
+            if(textStrategy == 'plain') {
+                return text;
+            } else if (textStrategy == 'capitalizeFirstAndLowercaseRemaining') {
+                return chance.capitalize(text.toLowerCase());
+            } else { // just fallback to plain
+                return text;
+            }
+        });
     };
 
     /**
@@ -62,14 +68,8 @@ var DummyGenerator = function () {
         return chance.domain();
     };
 
-    this.withDummyPassword = function (element) {
-        this.populateWith(element, CUSTOM_DUMMY_PASSWORD_KEY);
-    };
-
-    this.populateWith = function (element, optionName) {
-        chrome.storage.local.get(DEFAULT_OPTIONS, function (options) {
-            element.value = options[optionName];
-        });
+    this.getDummyPassword = function (element) {
+        return _options.getOption('password');
     };
 
     this.getDummyDate = function (limits) {

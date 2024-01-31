@@ -1,7 +1,11 @@
 Dummy Form Filler for Firefox and Chrome
 ----------------------------------------
 
-**Simple extension that populates HTML forms with dummy data. 
+Source code exists in two flavours due to browser-specific `manifest.json`, see branches:
+- `platform/firefox`
+- `platform/chrome` (same as `master`)
+
+**Simple extension that populates HTML forms with dummy data.
 Useful for web developers and testers.**
 
 Get it for:
@@ -11,7 +15,6 @@ Get it for:
 Try it [here](https://rawgit.com/ptomaszek/dummy-form-filler/master/show.html).
 
 #### Features:
-- Lack of features.
 - Works out of the box.
 - Default shortcut Alt+Shift+D (can be changed in chrome://extensions/configureCommands)
 - Configurable options (basics).
@@ -30,6 +33,10 @@ Thank you for reviews and raised issues. And for using the add-on.
 Recent changes in [CHANGELOG.md](CHANGELOG.md)
 
 -----
+Caveats:
+- For FF, the `browser_specific_settings` must be set in `manifest.json` in order to work with chrome.storage.**sync**
+
+-----
 ### Development & package preparation
 
 1. Install [npm](https://www.npmjs.com/), best via [nvm](https://github.com/nvm-sh/nvm), e.g.:
@@ -40,10 +47,11 @@ Recent changes in [CHANGELOG.md](CHANGELOG.md)
     ```
     npm run prepare-dependencies
     ```
-1. Start Firefox with the extension (development phase)
-    ```
-    npm run web-ext:browser -- --start-url=show.html
-    ```
+1. Start browser with the extension (development phase)
+    - Firefox  
+      `npm run web-ext:browser -- --start-url=show.html`
+    - Chrome  
+      `npm run web-ext:browser -- --start-url=show.html -t chromium`
 1. Build final package
     ```
     npm run web-ext:build
