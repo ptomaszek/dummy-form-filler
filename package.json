@@ -7,13 +7,21 @@
     "chance": "^1.1.8"
   },
   "devDependencies": {
+    "shx": "^0.3.4",
     "web-ext": "^7.11.0"
   },
   "scripts": {
     "prepare-dependencies": "npm install && node prepareDependencies.js && npm run delete-references-to-map-files",
     "delete-references-to-map-files": "find src/js-ext -regex '.*\\.\\(js\\|css\\)' -exec sed -i -E '\\/[\\*\\/]#\\ssourceMappingURL=(.+)/g' {} +",
-    "web-ext:browser": "web-ext run --source-dir=src/",
-    "web-ext:build": "web-ext build --source-dir=src/ --overwrite-dest",
-    "clean": "rm -r node_modules && rm -r src/js-ext && rm -r web-ext-artifacts"
+
+    "web-ext:chromium-test": "mkdir -p bundles/chromium && shx cp -r src/* bundles/chromium && shx cp manifests/chromium/manifest.json bundles/chromium && web-ext run --source-dir=bundles/chromium --start-url=show.html -t chromium",
+    "web-ext:firefox-mv2-test": "mkdir -p bundles/firefox-mv2 && shx cp -r src/* bundles/firefox-mv2 && shx cp manifests/firefox-mv2/manifest.json bundles/firefox-mv2 && web-ext run --source-dir=bundles/firefox-mv2 --start-url=show.html",
+    "web-ext:firefox-mv3-test": "mkdir -p bundles/firefox-mv3 && shx cp -r src/* bundles/firefox-mv3 && shx cp manifests/firefox-mv3/manifest.json bundles/firefox-mv3 && web-ext run --source-dir=bundles/firefox-mv3 --start-url=show.html",
+
+    "web-ext:chromium-build": "web-ext build --source-dir=bundles/chromium --artifacts-dir=bundles --overwrite-dest",
+    "web-ext:firefox-mv2-build": "web-ext build --source-dir=bundles/firefox-mv2 --artifacts-dir=bundles --overwrite-dest",
+    "web-ext:firefox-mv3-build": "web-ext build --source-dir=bundles/firefox-mv3--artifacts-dir=bundles --overwrite-dest",
+
+    "clean": "rm -r node_modules && rm -r src/js-ext && rm -r bundles"
   }
 }

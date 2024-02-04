@@ -1,16 +1,12 @@
 Dummy Form Filler for Firefox and Chrome
 ----------------------------------------
 
-Source code exists in two flavours due to browser-specific `manifest.json`, see branches:
-- `platform/firefox`
-- `platform/chrome` (same as `master`)
-
 **Simple extension that populates HTML forms with dummy data.
 Useful for web developers and testers.**
 
 Get it for:
+- Chrome/Chromium - [Web Store page](https://chrome.google.com/webstore/detail/dummy-form-filler/npghpiokpleaiakfmalkmhkcloahfnad)
 - Firefox - [Add-ons page](https://addons.mozilla.org/pl/firefox/addon/dummy-form-filler/)
-- Chrome - [Web Store page](https://chrome.google.com/webstore/detail/dummy-form-filler/npghpiokpleaiakfmalkmhkcloahfnad)
 
 Try it [here](https://rawgit.com/ptomaszek/dummy-form-filler/master/show.html).
 
@@ -34,7 +30,9 @@ Recent changes in [CHANGELOG.md](CHANGELOG.md)
 
 -----
 Caveats:
+- Source code exists few flavours due to browser-specific `manifest.json`, see [manifests](manifests). 
 - For FF, the `browser_specific_settings` must be set in `manifest.json` in order to work with chrome.storage.**sync**
+- For FF mv3 content scripts are loaded AFTER first invocation of the background scripts, so that the very first extension call doesn't work
 
 -----
 ### Development & package preparation
@@ -47,12 +45,17 @@ Caveats:
     ```
     npm run prepare-dependencies
     ```
-1. Start browser with the extension (development phase)
-    - Firefox  
-      `npm run web-ext:browser -- --start-url=show.html`
-    - Chrome  
-      `npm run web-ext:browser -- --start-url=show.html -t chromium`
-1. Build final package
-    ```
-    npm run web-ext:build
-    ```
+1. Test the extension
+    - Chrome/Chromium
+      `npm run web-ext:chromium-test`
+    - Firefox mv2
+      `npm run web-ext:firefox-mv2-test`
+    - Firefox mv3
+      `npm run web-ext:firefox-mv3-test`
+1. Build final packages (must run the previous step first)
+    - Chrome/Chromium
+      `npm run web-ext:chromium-build`
+     - Firefox mv2
+      `npm run web-ext:firefox-mv2-build`
+    - Firefox mv3
+      `npm run web-ext:firefox-mv3-build`
