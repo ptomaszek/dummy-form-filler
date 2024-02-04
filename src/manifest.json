@@ -13,7 +13,7 @@
   },
 
   "permissions": [
-    "activeTab", "storage", "scripting"
+    "activeTab", "tabs", "storage", "scripting"
   ],
 
   "action": {
@@ -25,19 +25,12 @@
     },
     "default_title": "Dummy Form Filler"
   },
-
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "3c3c58b1-7398-4256-9c0d-e57322904c2a@jetpack",
-      "strict_min_version": "109.0"
-    }
-  },
-
   "background": {
-    "scripts": [
-      "background.js"
-    ]
+    "service_worker": "background.js",
+    "type": "module"
   },
+
+
 
   "content_scripts": [
     {
@@ -47,13 +40,6 @@
         "file:///*/*.xml"
       ],
       "js": [
-        "options/default-options.js",
-        "js-ext/chance.min.js",
-        "js/dummy-options.js",
-        "js/dummy-logger.js",
-        "js/dummy-augur.js",
-        "js/dummy-limits.js",
-        "js/dummy-generator.js",
         "js/dummy-engine.js"
       ]
     }
