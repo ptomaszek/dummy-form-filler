@@ -13,7 +13,7 @@
   },
 
   "permissions": [
-    "activeTab", "storage", "scripting"
+    "activeTab", "storage"
   ],
 
   "action": {
@@ -45,7 +45,8 @@
         "js/dummy-augur.js",
         "js/dummy-limits.js",
         "js/dummy-generator.js",
-        "js/dummy-engine.js"
+        "js/dummy-engine.js",
+        "js/main.js"
       ]
     }
   ],
